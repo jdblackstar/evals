@@ -40,3 +40,8 @@ packages = ["evals"]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.8",
+]
