@@ -35,6 +35,7 @@ ENV/
 outputs/
 *.db
 .cache/
+.ruff_cache/
 
 # Environment
 .env
