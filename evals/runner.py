@@ -482,13 +482,11 @@ class ModelRunner:
                 )
             )
 
-        turn_offset = len(result_turns)
-
         for i, turn in enumerate(turns):
             messages.append(turn.to_message_dict())
             result_turns.append(
                 ConversationTurnResult(
-                    turn_index=turn_offset + i * 2,
+                    turn_index=len(result_turns),
                     role=turn.role,
                     content=turn.content,
                 )
@@ -532,7 +530,7 @@ class ModelRunner:
             messages.append({"role": "assistant", "content": assistant_content})
             result_turns.append(
                 ConversationTurnResult(
-                    turn_index=turn_offset + i * 2 + 1,
+                    turn_index=len(result_turns),
                     role="assistant",
                     content=assistant_content,
                     usage=usage,
