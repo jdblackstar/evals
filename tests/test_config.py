@@ -222,6 +222,72 @@ class TestDimensionConfig:
         assert 0.5 in values
         assert 1.0 in values
 
+    def test_range_dimension_negative_step(self):
+        """Test range-type dimension with negative step."""
+        config = DimensionConfig(
+            name="level",
+            type="range",
+            start=10.0,
+            stop=0.0,
+            step=-2.0,
+        )
+        values = config.get_values()
+        assert 10.0 in values
+        assert 8.0 in values
+        assert 6.0 in values
+        assert 4.0 in values
+        assert 2.0 in values
+        assert 0.0 in values
+        assert len(values) == 6
+
+    def test_range_dimension_default_negative_step(self):
+        """Test range with start > stop uses default negative step."""
+        config = DimensionConfig(
+            name="level",
+            type="range",
+            start=5.0,
+            stop=0.0,
+            # step not specified, should default to -1.0
+        )
+        values = config.get_values()
+        assert values == [5.0, 4.0, 3.0, 2.0, 1.0, 0.0]
+
+    def test_range_dimension_invalid_positive_step(self):
+        """Test that positive step with start > stop raises error."""
+        config = DimensionConfig(
+            name="level",
+            type="range",
+            start=10.0,
+            stop=0.0,
+            step=1.0,  # Invalid: positive step but start > stop
+        )
+        with pytest.raises(ValueError, match="positive step requires start <= stop"):
+            config.get_values()
+
+    def test_range_dimension_invalid_negative_step(self):
+        """Test that negative step with start < stop raises error."""
+        config = DimensionConfig(
+            name="level",
+            type="range",
+            start=0.0,
+            stop=10.0,
+            step=-1.0,  # Invalid: negative step but start < stop
+        )
+        with pytest.raises(ValueError, match="negative step requires start >= stop"):
+            config.get_values()
+
+    def test_range_dimension_zero_step(self):
+        """Test that zero step raises error."""
+        config = DimensionConfig(
+            name="level",
+            type="range",
+            start=0.0,
+            stop=10.0,
+            step=0.0,
+        )
+        with pytest.raises(ValueError, match="step cannot be zero"):
+            config.get_values()
+
     def test_single_value_becomes_list(self):
         """Test that single value is converted to list."""
         config = DimensionConfig(

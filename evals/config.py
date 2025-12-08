@@ -81,12 +81,39 @@ class DimensionConfig(BaseModel):
                 raise ValueError(
                     f"Dimension '{self.name}' has type 'range' but missing start/stop"
                 )
-            step = self.step or 1.0
+            # Default step: positive if start < stop, negative if start > stop
+            if self.step is None:
+                step = 1.0 if self.start <= self.stop else -1.0
+            else:
+                step = self.step
+
+            # Validate step direction matches start/stop relationship
+            if step > 0 and self.start > self.stop:
+                raise ValueError(
+                    f"Dimension '{self.name}': positive step requires start <= stop"
+                )
+            if step < 0 and self.start < self.stop:
+                raise ValueError(
+                    f"Dimension '{self.name}': negative step requires start >= stop"
+                )
+            if step == 0:
+                raise ValueError(f"Dimension '{self.name}': step cannot be zero")
+
             values = []
             current = self.start
-            while current <= self.stop + 1e-9:  # Small epsilon for float comparison
-                values.append(round(current, 10))
-                current += step
+            epsilon = 1e-9
+
+            if step > 0:
+                # Positive step: iterate from start to stop (inclusive)
+                while current <= self.stop + epsilon:
+                    values.append(round(current, 10))
+                    current += step
+            else:
+                # Negative step: iterate from start down to stop (inclusive)
+                while current >= self.stop - epsilon:
+                    values.append(round(current, 10))
+                    current += step
+
             return values
 
         if self.type == "llm_expand":
