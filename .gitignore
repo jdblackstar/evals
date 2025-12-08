@@ -36,6 +36,7 @@ outputs/
 *.db
 .cache/
 .ruff_cache/
+.pytest_cache/
 
 # Environment
 .env
