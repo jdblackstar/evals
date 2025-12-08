@@ -1,9 +1,10 @@
 """Tests for evals.cache module."""
 
+import asyncio
 import tempfile
 from pathlib import Path
 
-from evals.cache import get_cache
+from evals.cache import CacheStore, get_cache
 
 
 class TestGetCache:
@@ -66,3 +67,39 @@ class TestGetCache:
             cache2 = get_cache(db_path_path)
 
             assert cache1 is cache2
+
+
+class TestCacheStoreEventLoop:
+    """Tests for CacheStore event loop handling."""
+
+    def test_multiple_event_loops(self):
+        """Test that cache works correctly across multiple asyncio.run() calls."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "test.db"
+            cache = CacheStore(db_path)
+
+            async def _use_cache():
+                """Use cache in an async context."""
+                await cache.set("test-model", "test prompt", {}, {"result": "test"})
+                result = await cache.get("test-model", "test prompt", {})
+                assert result is not None
+                assert result.response == {"result": "test"}
+                return True
+
+            # Each asyncio.run() creates a new event loop
+            # This should not raise RuntimeError about locks attached to different loops
+            result1 = asyncio.run(_use_cache())
+            result2 = asyncio.run(_use_cache())
+
+            assert result1 is True
+            assert result2 is True
+
+            # Verify the cache persists across event loops
+            async def _verify_cache():
+                """Verify cache entry persists."""
+                result = await cache.get("test-model", "test prompt", {})
+                assert result is not None
+                return result.response
+
+            result = asyncio.run(_verify_cache())
+            assert result == {"result": "test"}

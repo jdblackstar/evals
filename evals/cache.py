@@ -43,14 +43,44 @@ class CacheStore:
         """
         self.db_path = Path(db_path)
         self._initialized = False
-        self._init_lock = asyncio.Lock()
+        self._init_lock: asyncio.Lock | None = None
+        self._init_lock_loop: asyncio.AbstractEventLoop | None = None
+
+    def _get_init_lock(self) -> asyncio.Lock:
+        """
+        Get the initialization lock for the current event loop.
+
+        Creates a new lock for each event loop to avoid issues when
+        sync wrapper methods create new loops via asyncio.run().
+        """
+        try:
+            current_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            # No running loop, create a new lock (will be bound when used)
+            if self._init_lock is None:
+                self._init_lock = asyncio.Lock()
+                self._init_lock_loop = None
+            return self._init_lock
+
+        # Check if lock exists and is bound to the current loop
+        if (
+            self._init_lock is None
+            or self._init_lock_loop is None
+            or self._init_lock_loop is not current_loop
+            or self._init_lock_loop.is_closed()
+        ):
+            # Create a new lock for this event loop
+            self._init_lock = asyncio.Lock()
+            self._init_lock_loop = current_loop
+
+        return self._init_lock
 
     async def _ensure_initialized(self) -> None:
         """Initialize the database schema if needed."""
         if self._initialized:
             return
 
-        async with self._init_lock:
+        async with self._get_init_lock():
             if self._initialized:
                 return
 
