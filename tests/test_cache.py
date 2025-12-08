@@ -3,7 +3,7 @@
 import tempfile
 from pathlib import Path
 
-from evals.cache import CacheStore, get_cache
+from evals.cache import get_cache
 
 
 class TestGetCache:
@@ -66,4 +66,3 @@ class TestGetCache:
             cache2 = get_cache(db_path_path)
 
             assert cache1 is cache2
-

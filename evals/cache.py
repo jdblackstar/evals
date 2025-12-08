@@ -267,8 +267,8 @@ def get_cache(db_path: Path | str = ".cache/responses.db") -> CacheStore:
     global _cache_instances
     # Normalize path to string for consistent key lookup
     path_str = str(Path(db_path).resolve())
-    
+
     if path_str not in _cache_instances:
         _cache_instances[path_str] = CacheStore(db_path)
-    
+
     return _cache_instances[path_str]
