@@ -4,6 +4,7 @@ Caching layer for API responses.
 Uses SQLite for persistent, async-compatible caching of model completions.
 """
 
+import asyncio
 import hashlib
 import json
 import time
@@ -42,30 +43,35 @@ class CacheStore:
         """
         self.db_path = Path(db_path)
         self._initialized = False
+        self._init_lock = asyncio.Lock()
 
     async def _ensure_initialized(self) -> None:
         """Initialize the database schema if needed."""
         if self._initialized:
             return
 
-        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        async with self._init_lock:
+            if self._initialized:
+                return
 
-        async with aiosqlite.connect(self.db_path) as db:
-            await db.execute("""
-                CREATE TABLE IF NOT EXISTS cache (
-                    key TEXT PRIMARY KEY,
-                    response TEXT NOT NULL,
-                    model TEXT NOT NULL,
-                    created_at REAL NOT NULL,
-                    metadata TEXT
-                )
-            """)
-            await db.execute("""
-                CREATE INDEX IF NOT EXISTS idx_cache_model ON cache(model)
-            """)
-            await db.commit()
+            self.db_path.parent.mkdir(parents=True, exist_ok=True)
 
-        self._initialized = True
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute("""
+                    CREATE TABLE IF NOT EXISTS cache (
+                        key TEXT PRIMARY KEY,
+                        response TEXT NOT NULL,
+                        model TEXT NOT NULL,
+                        created_at REAL NOT NULL,
+                        metadata TEXT
+                    )
+                """)
+                await db.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_cache_model ON cache(model)
+                """)
+                await db.commit()
+
+            self._initialized = True
 
     @staticmethod
     def _make_key(model: str, prompt: str, params: dict[str, Any]) -> str:
