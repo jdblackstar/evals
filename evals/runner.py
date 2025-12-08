@@ -136,6 +136,7 @@ class ModelRunner:
         self._max_concurrent = max_concurrent
         self._client: AsyncOpenAI | None = None
         self._semaphore: asyncio.Semaphore | None = None
+        self._semaphore_loop: asyncio.AbstractEventLoop | None = None
 
     def set_config(self, config: ModelConfig) -> None:
         """Set or update the model configuration."""
@@ -165,9 +166,32 @@ class ModelRunner:
 
     @property
     def semaphore(self) -> asyncio.Semaphore:
-        """Get the concurrency semaphore."""
-        if self._semaphore is None:
+        """
+        Get the concurrency semaphore.
+
+        Creates a new semaphore for each event loop to avoid issues when
+        sync wrapper methods create new loops via asyncio.run().
+        """
+        try:
+            current_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            # No running loop, create a new semaphore (will be bound when used)
+            if self._semaphore is None:
+                self._semaphore = asyncio.Semaphore(self._max_concurrent)
+                self._semaphore_loop = None
+            return self._semaphore
+
+        # Check if semaphore exists and is bound to the current loop
+        if (
+            self._semaphore is None
+            or self._semaphore_loop is None
+            or self._semaphore_loop is not current_loop
+            or self._semaphore_loop.is_closed()
+        ):
+            # Create a new semaphore for this event loop
             self._semaphore = asyncio.Semaphore(self._max_concurrent)
+            self._semaphore_loop = current_loop
+
         return self._semaphore
 
     def _get_cache_params(self, **overrides: Any) -> dict[str, Any]:
