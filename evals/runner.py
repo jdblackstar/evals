@@ -257,6 +257,9 @@ class ModelRunner:
             raise ValueError("Model config not set")
 
         cache_params = self._get_cache_params(**kwargs)
+        # Include system_prompt in cache key to avoid collisions
+        if system_prompt:
+            cache_params["system_prompt"] = system_prompt
 
         if use_cache:
             cached = await self.cache.get(self.config.name, prompt, cache_params)
