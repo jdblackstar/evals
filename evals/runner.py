@@ -442,6 +442,18 @@ class ModelRunner:
         key_str = json.dumps(key_data, sort_keys=True)
         return hashlib.sha256(key_str.encode()).hexdigest()
 
+    def _serialize_messages_for_cache(
+        self,
+        messages: list[dict[str, str]],
+        **params: Any,
+    ) -> str:
+        """Serialize messages and params for cache lookup."""
+        key_data = {
+            "messages": messages,
+            "params": params,
+        }
+        return json.dumps(key_data, sort_keys=True)
+
     async def complete_conversation(
         self,
         turns: list[Turn],
@@ -496,13 +508,13 @@ class ModelRunner:
                 continue
 
             cache_params = self._get_cache_params(**kwargs)
-            cache_key = self._get_conversation_cache_key(messages, **cache_params)
+            cache_prompt = self._serialize_messages_for_cache(messages, **cache_params)
 
             cached_response = None
             if use_cache:
                 cached_response = await self.cache.get(
                     self.config.name,
-                    cache_key,
+                    cache_prompt,
                     cache_params,
                 )
 
@@ -522,7 +534,7 @@ class ModelRunner:
                 if use_cache:
                     await self.cache.set(
                         self.config.name,
-                        cache_key,
+                        cache_prompt,
                         cache_params,
                         response,
                     )
