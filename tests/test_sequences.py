@@ -195,7 +195,8 @@ class TestHysteresis:
     def test_identical_responses(self):
         """Test hysteresis with identical responses."""
         forward = ["Response A", "Response B"]
-        reverse = ["Response A", "Response B"]
+        # Reverse-order run answers the same prompts, but in reverse position.
+        reverse = ["Response B", "Response A"]
 
         result = compute_hysteresis(forward, reverse)
 
@@ -225,13 +226,29 @@ class TestHysteresis:
     def test_per_turn_comparison(self):
         """Test that per-turn comparisons are included."""
         forward = ["A", "B"]
-        reverse = ["A", "C"]
+        # Reverse order: forward[0] aligns to reverse[1], forward[1] aligns to reverse[0]
+        reverse = ["C", "A"]
 
         result = compute_hysteresis(forward, reverse)
 
         assert len(result.per_turn_comparison) == 2
         assert "similarity" in result.per_turn_comparison[0]
         assert "difference" in result.per_turn_comparison[0]
+
+    def test_reverse_alignment_matches_same_prompt(self):
+        """
+        Regression test: reverse responses must be aligned to the same prompt.
+
+        Forward prompts [A, B, C] => responses [rA, rB, rC]
+        Reverse prompts [C, B, A] => responses [rC, rB, rA]
+        Correct hysteresis should be 0 when all same-prompt responses match.
+        """
+        forward = ["rA", "rB", "rC"]
+        reverse = ["rC", "rB", "rA"]
+
+        result = compute_hysteresis(forward, reverse)
+        assert result.hysteresis_score == 0.0
+        assert result.has_hysteresis is False
 
     def test_empty_responses(self):
         """Test handling empty response lists."""

@@ -295,7 +295,8 @@ def compute_hysteresis(
     Returns:
         HysteresisResult with score and per-turn comparisons.
     """
-    # Compare corresponding turns (note: reverse has different order)
+    # Reverse runs reorder prompts, so index `i` in forward corresponds to
+    # index `n-1-i` in reverse (same prompt answered in opposite position).
     n_turns = min(len(forward_responses), len(reverse_responses))
 
     per_turn: list[dict[str, Any]] = []
@@ -303,15 +304,18 @@ def compute_hysteresis(
 
     for i in range(n_turns):
         forward_resp = forward_responses[i]
-        # Compare with reverse at same position
-        reverse_resp = reverse_responses[i]
+        reverse_index = n_turns - 1 - i
+        reverse_resp = reverse_responses[reverse_index]
 
         similarity = _compute_response_similarity(forward_resp, reverse_resp)
         difference = 1.0 - similarity
 
         per_turn.append(
             {
+                # Backwards-compatible alias (refers to forward index).
                 "turn_index": i,
+                "forward_turn_index": i,
+                "reverse_turn_index": reverse_index,
                 "forward_preview": forward_resp[:100],
                 "reverse_preview": reverse_resp[:100],
                 "similarity": similarity,
