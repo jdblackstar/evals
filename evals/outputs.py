@@ -108,15 +108,31 @@ def load_run(path: Path | str) -> ExperimentRun:
 
 def _generate_html_report(run: ExperimentRun, output_path: Path) -> None:
     """Generate an HTML report for the experiment."""
+    import html as _html
+    import re
+
+    def _esc(value: Any) -> str:
+        """HTML-escape arbitrary values for safe embedding into HTML text/attrs."""
+        return _html.escape("" if value is None else str(value), quote=True)
+
+    def _css_token(value: Any) -> str:
+        """Convert arbitrary values into a safe, limited CSS token."""
+        s = "" if value is None else str(value)
+        s = s.strip().lower()
+        s = re.sub(r"[^a-z0-9_-]+", "-", s)
+        s = re.sub(r"-{2,}", "-", s).strip("-")
+        return s
+
     # Count labels
     labels = [r.get("judgment", {}).get("label", "unknown") for r in run.results]
     label_counts = Counter(labels)
 
+    run_name = _esc(run.name)
     html = f"""<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{run.name} - Experiment Report</title>
+    <title>{run_name} - Experiment Report</title>
     <style>
         body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -183,7 +199,7 @@ def _generate_html_report(run: ExperimentRun, output_path: Path) -> None:
     </style>
 </head>
 <body>
-    <h1>{run.name}</h1>
+    <h1>{run_name}</h1>
 
     <div class="card">
         <h2>Summary</h2>
@@ -215,13 +231,14 @@ def _generate_html_report(run: ExperimentRun, output_path: Path) -> None:
     total = len(labels)
     for label, count in sorted(label_counts.items(), key=lambda x: -x[1]):
         pct = count / total * 100 if total > 0 else 0
+        label_text = _esc(label)
         label_class = (
-            f"label-{label}"
+            f"label-{_css_token(label)}"
             if label in ("compliance", "refusal", "partial", "evasion")
             else ""
         )
         html += f"""                <tr>
-                    <td><span class="label {label_class}">{label}</span></td>
+                    <td><span class="label {label_class}">{label_text}</span></td>
                     <td>{count}</td>
                     <td>{pct:.1f}%</td>
                 </tr>
@@ -249,12 +266,12 @@ def _generate_html_report(run: ExperimentRun, output_path: Path) -> None:
 </body>
 </html>
 """.format(
-        started=run.started_at,
-        completed=run.completed_at or "In progress",
-        git_hash=run.git_hash or "N/A",
-        git_branch=run.git_branch or "N/A",
-        git_dirty="Yes" if run.git_dirty else "No",
-        config=json.dumps(run.config, indent=2),
+        started=_esc(run.started_at),
+        completed=_esc(run.completed_at or "In progress"),
+        git_hash=_esc(run.git_hash or "N/A"),
+        git_branch=_esc(run.git_branch or "N/A"),
+        git_dirty=_esc("Yes" if run.git_dirty else "No"),
+        config=_esc(json.dumps(run.config, indent=2)),
     )
 
     with open(output_path, "w") as f:
