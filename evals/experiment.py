@@ -279,6 +279,14 @@ async def _run_sequence_experiment(
                     "label": "judge_error",
                     "error": str(e),
                 }
+                run.add_error(
+                    {
+                        "type": "judgment_error",
+                        "index": point.index,
+                        "sample": sample_idx,
+                        "error": str(e),
+                    }
+                )
 
             # Compute behavior embedding
             behavior_emb = None
