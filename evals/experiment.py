@@ -7,6 +7,7 @@ multi-turn sequence tasks with behavior embeddings and metacognition probes.
 """
 
 import asyncio
+from collections import defaultdict, deque
 from pathlib import Path
 
 from rich.console import Console
@@ -87,12 +88,23 @@ async def _run_single_turn_experiment(
                 use_cache=use_cache,
             )
 
-            prompt_to_batch: dict[str, tuple[SweepPoint, int]] = {
-                point.prompt: (point, sample_idx) for point, sample_idx in batch
-            }
+            # NOTE: Multiple samples (or even multiple sweep points) can share the same
+            # rendered prompt string. We must not use `prompt` as a unique dict key.
+            # Instead, treat it as a queue of (point, sample_idx) pairs in input order.
+            prompt_to_batch: dict[str, deque[tuple[SweepPoint, int]]] = defaultdict(
+                deque
+            )
+            for point, sample_idx in batch:
+                prompt_to_batch[point.prompt].append((point, sample_idx))
 
             for completion in batch_result.completions:
-                point, sample_idx = prompt_to_batch[completion.prompt]
+                if not prompt_to_batch[completion.prompt]:
+                    raise ValueError(
+                        "Batch completion prompt did not match any pending sample. "
+                        "This can happen if the batch result order is inconsistent with "
+                        "the input prompts, or if a completion returned an unexpected prompt."
+                    )
+                point, sample_idx = prompt_to_batch[completion.prompt].popleft()
 
                 # Judge the response
                 try:
