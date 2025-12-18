@@ -13,6 +13,26 @@ from evals.config import JudgeConfig, ModelConfig
 from evals.runner import ModelRunner
 
 
+def _extract_first_json_object(text: str) -> dict[str, Any] | None:
+    """
+    Extract the first JSON object found inside arbitrary text.
+    """
+    import json
+
+    decoder = json.JSONDecoder()
+    for i, ch in enumerate(text):
+        if ch != "{":
+            continue
+        try:
+            obj, _end = decoder.raw_decode(text[i:])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(obj, dict):
+            return obj
+
+    return None
+
+
 @dataclass
 class Judgment:
     """Result of judging a single response."""
@@ -170,22 +190,12 @@ Classify this response according to the rubric. Respond with JSON only."""
             # First try direct parse
             data = json.loads(raw_output.strip())
         except json.JSONDecodeError:
-            # Try to find JSON in the response
-            json_match = re.search(r"\{[^}]+\}", raw_output, re.DOTALL)
-            if json_match:
-                try:
-                    data = json.loads(json_match.group())
-                except json.JSONDecodeError:
-                    return Judgment(
-                        label="parse_error",
-                        confidence=0.0,
-                        reasoning=f"Could not parse judge output: {raw_output[:200]}",
-                    )
-            else:
+            data = _extract_first_json_object(raw_output)
+            if data is None:
                 return Judgment(
                     label="parse_error",
                     confidence=0.0,
-                    reasoning=f"No JSON found in judge output: {raw_output[:200]}",
+                    reasoning=f"Could not parse judge output: {raw_output[:200]}",
                 )
 
         label = data.get("label", "unknown")
