@@ -112,18 +112,23 @@ class SequenceTask:
         """
         Create a reversed version of this task for hysteresis probes.
 
-        Returns a new SequenceTask with user turns in reverse order.
-        System prompts and metadata are preserved.
+        Returns a new SequenceTask with non-system turns in reverse order.
+
+        Notes:
+        - System turns are preserved (and placed first, in their original order).
+        - User and assistant turns are reversed together. This avoids silently
+          discarding scripted assistant turns, which are valid per `TurnTemplate.role`.
 
         Returns:
             New SequenceTask with reversed turn order.
         """
-        # Separate user turns from system turns
-        user_turns = [t for t in self.turns if t.role == "user"]
+        # Separate system turns from all other turns.
+        # Important: keep assistant turns too (they may be scripted context).
         system_turns = [t for t in self.turns if t.role == "system"]
+        non_system_turns = [t for t in self.turns if t.role != "system"]
 
-        # Reverse user turns
-        reversed_user_turns = list(reversed(user_turns))
+        # Reverse non-system turns (user + assistant)
+        reversed_non_system_turns = list(reversed(non_system_turns))
 
         # Re-index the reversed turns
         reindexed_turns = []
@@ -139,7 +144,7 @@ class SequenceTask:
             )
             idx += 1
 
-        for turn in reversed_user_turns:
+        for turn in reversed_non_system_turns:
             reindexed_turns.append(
                 TurnTemplate(
                     role=turn.role,

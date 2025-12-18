@@ -132,6 +132,35 @@ class TestSequenceTask:
 
         assert reversed_task.system_prompt == "You are helpful."
 
+    def test_reversed_preserves_assistant_turns(self):
+        """
+        Scripted assistant turns are valid in TurnTemplate.role and must not be dropped.
+
+        Reversal should reverse all non-system turns together while keeping system turns first.
+        """
+        task = SequenceTask(
+            name="original",
+            turns=[
+                TurnTemplate(role="system", content_template="System 1", turn_index=0),
+                TurnTemplate(role="user", content_template="User 1", turn_index=1),
+                TurnTemplate(
+                    role="assistant", content_template="Assistant 1", turn_index=2
+                ),
+                TurnTemplate(role="user", content_template="User 2", turn_index=3),
+            ],
+        )
+
+        reversed_task = task.reversed()
+        turns = reversed_task.build_conversation({})
+
+        assert [t.role for t in turns] == ["system", "user", "assistant", "user"]
+        assert [t.content for t in turns] == [
+            "System 1",
+            "User 2",
+            "Assistant 1",
+            "User 1",
+        ]
+
     def test_to_conversation_history(self):
         """Test converting to ConversationHistory."""
         task = SequenceTask(
