@@ -134,6 +134,19 @@ def _extract_confidence_score(response: str) -> float | None:
 
     text_lower = response.lower()
 
+    def _contains_qualitative_phrase(text: str, phrase: str) -> bool:
+        """
+        Return True if `phrase` appears in `text` as a qualitative indicator.
+
+        We use word-boundary matching for single-word phrases to avoid
+        substring false positives (e.g., "sure" inside "measure"/"ensure").
+        Multi-word phrases continue to use substring matching because they are
+        already specific and less prone to accidental matches.
+        """
+        if " " in phrase:
+            return phrase in text
+        return re.search(rf"\b{re.escape(phrase)}\b", text) is not None
+
     # Look for explicit "X/10" or "X out of 10" patterns
     scale_10_patterns = [
         r"(\d+)\s*/\s*10",
@@ -182,15 +195,15 @@ def _extract_confidence_score(response: str) -> float | None:
     ]
 
     for phrase in low_confidence:
-        if phrase in text_lower:
+        if _contains_qualitative_phrase(text_lower, phrase):
             return 0.25
 
     for phrase in medium_confidence:
-        if phrase in text_lower:
+        if _contains_qualitative_phrase(text_lower, phrase):
             return 0.55
 
     for phrase in high_confidence:
-        if phrase in text_lower:
+        if _contains_qualitative_phrase(text_lower, phrase):
             return 0.85
 
     return None

@@ -113,6 +113,24 @@ class TestExtractConfidenceScore:
         score = _extract_confidence_score("I am very confident in this answer")
         assert score == 0.85
 
+    def test_qualitative_high_word_boundary(self) -> None:
+        """
+        Single-word qualitative indicators must not match inside other words.
+
+        Regression test: "sure" should not match inside "measure"/"ensure"/etc.
+        """
+        false_positive_texts = [
+            "I will measure the accuracy.",
+            "We should ensure correctness.",
+            "Under pressure, results may vary.",
+            "This is about exposure levels.",
+        ]
+
+        for text in false_positive_texts:
+            assert _extract_confidence_score(text) is None
+
+        assert _extract_confidence_score("I am sure.") == 0.85
+
     def test_qualitative_medium(self):
         """Test medium confidence qualitative indicators."""
         score = _extract_confidence_score("I'm fairly confident about this")
