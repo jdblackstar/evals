@@ -11,7 +11,6 @@ from typing import Any
 
 from evals.logging import ExperimentRun
 
-
 _CSV_RESERVED_FIELDS: set[str] = {"index", "prompt", "response", "label"}
 
 

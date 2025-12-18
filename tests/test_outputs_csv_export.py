@@ -48,5 +48,3 @@ def test_csv_export_does_not_corrupt_reserved_index_field(tmp_path: Path) -> Non
     assert row["var_label"] == "varlabel"
     assert row["x"] == "1"
     assert row["label"] == "ok"
-
-

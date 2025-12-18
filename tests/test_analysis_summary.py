@@ -37,7 +37,9 @@ def test_summarize_results_includes_dimension_names() -> None:
     assert {
         row["dimension_value"] for row in summary if row["dimension"] == "assertiveness"
     } == {0.0, 0.5}
-    assert {row["dimension_value"] for row in summary if row["dimension"] == "tone"} == {
+    assert {
+        row["dimension_value"] for row in summary if row["dimension"] == "tone"
+    } == {
         "polite",
         "firm",
     }
@@ -45,4 +47,3 @@ def test_summarize_results_includes_dimension_names() -> None:
     for row in summary:
         assert row["count"] == 1
         assert row["proportion"] == 1.0
-
