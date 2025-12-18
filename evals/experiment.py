@@ -20,7 +20,7 @@ from evals.outputs import save_run
 from evals.probes.behavior_vectorizer import compute_behavior_embedding
 from evals.probes.judge import BaseJudge, create_judge
 from evals.probes.metaprobes import run_all_metaprobes
-from evals.runner import ModelRunner
+from evals.runner import Completion, ModelRunner
 from evals.sequences import SequenceTask, TurnTemplate, compute_hysteresis
 from evals.sweep import SweepGrid, SweepPoint, build_grid
 
@@ -49,6 +49,45 @@ def _build_sequence_task(config: ExperimentConfig) -> SequenceTask:
         system_prompt=config.task.system_prompt,
         description=config.description or "",
     )
+
+
+def _match_completions_to_samples(
+    batch: list[tuple[SweepPoint, int]],
+    completions: list[Completion],
+) -> list[tuple[SweepPoint, int, Completion]]:
+    """
+    Align completions back to their submission slot.
+
+    Uses the request_index (set by ModelRunner.batch_complete) so that duplicate
+    prompts remain associated with their original sample index even when earlier
+    batch items fail. Falls back to prompt-based ordering if the index is missing.
+    """
+    index_lookup = {i: pair for i, pair in enumerate(batch)}
+
+    prompt_to_batch: dict[str, deque[tuple[SweepPoint, int]]] = defaultdict(deque)
+    for point, sample_idx in batch:
+        prompt_to_batch[point.prompt].append((point, sample_idx))
+
+    matched: list[tuple[SweepPoint, int, Completion]] = []
+    for completion in completions:
+        submission_index = completion.request_index
+        if submission_index is None:
+            submission_index = completion.metadata.get("request_index")
+
+        if submission_index is not None and submission_index in index_lookup:
+            point, sample_idx = index_lookup.pop(submission_index)
+        else:
+            if not prompt_to_batch[completion.prompt]:
+                raise ValueError(
+                    "Batch completion prompt did not match any pending sample. "
+                    "This can happen if the batch result order is inconsistent with "
+                    "the input prompts, or if a completion returned an unexpected prompt."
+                )
+            point, sample_idx = prompt_to_batch[completion.prompt].popleft()
+
+        matched.append((point, sample_idx, completion))
+
+    return matched
 
 
 async def _run_single_turn_experiment(
@@ -88,24 +127,11 @@ async def _run_single_turn_experiment(
                 use_cache=use_cache,
             )
 
-            # NOTE: Multiple samples (or even multiple sweep points) can share the same
-            # rendered prompt string. We must not use `prompt` as a unique dict key.
-            # Instead, treat it as a queue of (point, sample_idx) pairs in input order.
-            prompt_to_batch: dict[str, deque[tuple[SweepPoint, int]]] = defaultdict(
-                deque
+            matched_completions = _match_completions_to_samples(
+                batch, batch_result.completions
             )
-            for point, sample_idx in batch:
-                prompt_to_batch[point.prompt].append((point, sample_idx))
 
-            for completion in batch_result.completions:
-                if not prompt_to_batch[completion.prompt]:
-                    raise ValueError(
-                        "Batch completion prompt did not match any pending sample. "
-                        "This can happen if the batch result order is inconsistent with "
-                        "the input prompts, or if a completion returned an unexpected prompt."
-                    )
-                point, sample_idx = prompt_to_batch[completion.prompt].popleft()
-
+            for point, sample_idx, completion in matched_completions:
                 # Judge the response
                 try:
                     judgment = await judge.evaluate(

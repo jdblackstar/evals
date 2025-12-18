@@ -33,6 +33,7 @@ class Completion:
     finish_reason: str | None = None
     usage: dict[str, int] | None = None
     cached: bool = False
+    request_index: int | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
@@ -357,6 +358,8 @@ class ModelRunner:
                     }
                 )
             else:
+                result.request_index = i
+                result.metadata = {**result.metadata, "request_index": i}
                 completions.append(result)
                 total_tokens += result.tokens_used
                 if result.cached:
