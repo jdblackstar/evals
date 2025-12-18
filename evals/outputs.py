@@ -12,6 +12,36 @@ from typing import Any
 from evals.logging import ExperimentRun
 
 
+_CSV_RESERVED_FIELDS: set[str] = {"index", "prompt", "response", "label"}
+
+
+def _flatten_result_for_csv(result: dict[str, Any]) -> dict[str, Any]:
+    """
+    Flatten a single result dict into a CSV row dict.
+
+    Notes:
+        Some sweep dimensions may use names like "index" which would otherwise collide
+        with reserved export fields (e.g. the result index). To prevent silent
+        corruption, colliding variable keys are written with a "var_" prefix.
+    """
+    row: dict[str, Any] = {}
+
+    variables = result.get("variables", {})
+    if isinstance(variables, dict):
+        for key, value in variables.items():
+            if key in _CSV_RESERVED_FIELDS:
+                row[f"var_{key}"] = value
+            else:
+                row[key] = value
+
+    # Reserved export fields: set these last so they always reflect the true result.
+    row["index"] = result.get("index")
+    row["prompt"] = result.get("prompt", "")[:200]  # Truncate
+    row["response"] = result.get("response", "")[:500]  # Truncate
+    row["label"] = result.get("judgment", {}).get("label", "")
+    return row
+
+
 def save_run(
     run: ExperimentRun,
     output_dir: Path | str,
@@ -58,11 +88,7 @@ def save_run(
         fieldnames = set()
         rows = []
         for result in run.results:
-            row: dict[str, Any] = {"index": result.get("index")}
-            row.update(result.get("variables", {}))
-            row["prompt"] = result.get("prompt", "")[:200]  # Truncate
-            row["response"] = result.get("response", "")[:500]  # Truncate
-            row["label"] = result.get("judgment", {}).get("label", "")
+            row = _flatten_result_for_csv(result)
 
             fieldnames.update(row.keys())
             rows.append(row)
