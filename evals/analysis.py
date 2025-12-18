@@ -353,7 +353,12 @@ def summarize_results(
         results: Experiment results.
 
     Returns:
-        List of summary rows suitable for display.
+        List of summary rows suitable for display. Each row includes:
+        - dimension: Name of the sweep dimension
+        - dimension_value: The specific value for that dimension
+        - label: Judgment label
+        - count: Number of occurrences
+        - proportion: Share of this label within the dimension value
     """
     # Get dimension names from config or infer from results
     dimension_names = []
@@ -374,12 +379,17 @@ def summarize_results(
                 if col.startswith("_") or col == dim or col.endswith("_pct"):
                     continue
 
-                count = row.get(col, 0)
+                raw_count = row.get(col, 0)
+                count = 0 if pd.isna(raw_count) else int(raw_count)
                 total = row.get("_total", 0)
+                total = 0 if pd.isna(total) else total
                 pct = count / total if total > 0 else 0
+                if count <= 0:
+                    continue
 
                 summary.append(
                     {
+                        "dimension": dim,
                         "dimension_value": row[dim],
                         "label": col,
                         "count": int(count),
