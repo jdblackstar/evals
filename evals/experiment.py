@@ -76,6 +76,16 @@ def _match_completions_to_samples(
 
         if submission_index is not None and submission_index in index_lookup:
             point, sample_idx = index_lookup.pop(submission_index)
+            # Keep prompt-based queue in sync so fallback matching can't reuse this sample
+            prompt_queue = prompt_to_batch.get(point.prompt)
+            if prompt_queue is not None:
+                try:
+                    prompt_queue.remove((point, sample_idx))
+                except ValueError:
+                    # Should not happen, but avoid silent duplication if state drifts
+                    raise ValueError(
+                        "Matched completion could not be removed from prompt queue"
+                    )
         else:
             if not prompt_to_batch[completion.prompt]:
                 raise ValueError(
