@@ -355,9 +355,12 @@ async def _run_sequence_experiment(
             hysteresis_data = None
             if config.task.sequence and config.task.sequence.enable_hysteresis:
                 reversed_task = sequence_task.reversed()
+                remapped_turn_overrides = reversed_task.remap_overrides_from_original(
+                    turn_overrides
+                )
                 reversed_turns = reversed_task.build_conversation(
                     variables=point.variables,
-                    turn_overrides=turn_overrides,
+                    turn_overrides=remapped_turn_overrides,
                 )
 
                 try:

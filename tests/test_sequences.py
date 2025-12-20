@@ -188,6 +188,36 @@ class TestSequenceTask:
         assert task.system_prompt == "Be helpful"
         assert all(t.role == "user" for t in task.turns)
 
+    def test_reversed_remaps_overrides_by_original_index(self):
+        """
+        Overrides should follow the same logical turn after reversal.
+
+        turn_overrides keys reference forward-order indices; reversed sequence
+        must realign them so prompts receive the intended variables.
+        """
+        task = SequenceTask(
+            name="override_alignment",
+            turns=[
+                TurnTemplate(role="user", content_template="First: {{ marker }}"),
+                TurnTemplate(role="user", content_template="Second: {{ marker }}"),
+                TurnTemplate(role="user", content_template="Third: {{ marker }}"),
+            ],
+        )
+
+        overrides = {0: {"marker": "first_override"}, 2: {"marker": "third_override"}}
+
+        reversed_task = task.reversed()
+        remapped_overrides = reversed_task.remap_overrides_from_original(overrides)
+        reversed_turns = reversed_task.build_conversation(
+            variables={"marker": "base"}, turn_overrides=remapped_overrides
+        )
+
+        assert [t.content for t in reversed_turns] == [
+            "Third: third_override",
+            "Second: base",
+            "First: first_override",
+        ]
+
 
 class TestHysteresis:
     """Tests for hysteresis computation."""

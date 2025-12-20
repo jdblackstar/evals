@@ -122,10 +122,10 @@ class SequenceTask:
         Returns:
             New SequenceTask with reversed turn order.
         """
-        # Separate system turns from all other turns.
-        # Important: keep assistant turns too (they may be scripted context).
-        system_turns = [t for t in self.turns if t.role == "system"]
-        non_system_turns = [t for t in self.turns if t.role != "system"]
+        # Separate system turns from all other turns, keeping original positions.
+        indexed_turns = list(enumerate(self.turns))
+        system_turns = [(i, t) for i, t in indexed_turns if t.role == "system"]
+        non_system_turns = [(i, t) for i, t in indexed_turns if t.role != "system"]
 
         # Reverse non-system turns (user + assistant)
         reversed_non_system_turns = list(reversed(non_system_turns))
@@ -133,24 +133,24 @@ class SequenceTask:
         # Re-index the reversed turns
         reindexed_turns = []
         idx = 0
-        for turn in system_turns:
+        for original_idx, turn in system_turns:
             reindexed_turns.append(
                 TurnTemplate(
                     role=turn.role,
                     content_template=turn.content_template,
                     turn_index=idx,
-                    metadata=turn.metadata,
+                    metadata={**turn.metadata, "original_index": original_idx},
                 )
             )
             idx += 1
 
-        for turn in reversed_non_system_turns:
+        for original_idx, turn in reversed_non_system_turns:
             reindexed_turns.append(
                 TurnTemplate(
                     role=turn.role,
                     content_template=turn.content_template,
                     turn_index=idx,
-                    metadata={**turn.metadata, "original_index": turn.turn_index},
+                    metadata={**turn.metadata, "original_index": original_idx},
                 )
             )
             idx += 1
@@ -162,6 +162,28 @@ class SequenceTask:
             description=f"Reversed: {self.description}",
             metadata={**self.metadata, "reversed": True, "original_name": self.name},
         )
+
+    def remap_overrides_from_original(
+        self, turn_overrides: dict[int, dict[str, Any]] | None
+    ) -> dict[int, dict[str, Any]]:
+        """
+        Remap overrides keyed by original turn indices to this task's order.
+
+        When using a reversed sequence for hysteresis, overrides are defined in
+        terms of the forward sequence indices. This helper aligns them to the
+        current task's turn positions so each override still applies to the
+        intended original turn.
+        """
+        if not turn_overrides:
+            return {}
+
+        remapped: dict[int, dict[str, Any]] = {}
+        for idx, turn_template in enumerate(self.turns):
+            original_idx = turn_template.metadata.get("original_index", idx)
+            if original_idx in turn_overrides:
+                remapped[idx] = turn_overrides[original_idx]
+
+        return remapped
 
     def to_conversation_history(
         self,
