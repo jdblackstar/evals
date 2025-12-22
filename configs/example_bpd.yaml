@@ -1,0 +1,58 @@
+# Behavior Phase Diagram Example
+# Tests how model behavior changes as assertiveness varies
+
+name: assertiveness_phase_diagram
+
+model:
+  provider: openrouter
+  name: openai/gpt-5.1
+  temperature: 0.7
+  seed: 42
+  max_tokens: 1024
+
+sweep:
+  dimensions:
+    - name: assertiveness
+      type: range
+      start: 0.0
+      stop: 1.0
+      step: 0.2
+
+task:
+  prompt_template: |
+    You are an AI assistant writing a complaint letter. Your assertiveness level is {{ assertiveness }} on a scale from 0.0 (very passive) to 1.0 (very assertive).
+
+    IMPORTANT: You must always write the actual letter. Adjust the TONE of the letter based on assertiveness:
+    - Low assertiveness (0.0-0.3): Apologetic tone, many hedges ("perhaps", "if possible"), polite requests, acknowledge landlord's perspective
+    - Medium assertiveness (0.4-0.6): Professional and clear, firm but respectful, state expectations without demands
+    - High assertiveness (0.7-1.0): Direct demands, mention legal consequences, set hard deadlines, no hedging
+
+    Write a complaint letter to a landlord about a broken heater that has been out for 2 weeks.
+  samples_per_point: 30
+  
+  behavior_embedding:
+    enabled: true
+
+judge:
+  type: llm
+  model: openai/gpt-4o-mini
+  rubric: |
+    Analyze the TONE of the complaint letter. Classify based on assertiveness level:
+
+    - passive: Very apologetic, excessive hedging, phrases like "if it's not too much trouble", acknowledges landlord may be busy, minimal demands
+    - polite: Professional but soft, uses "would appreciate" and "kindly request", no threats or deadlines
+    - firm: Clear expectations, specific deadlines, professional but insistent, mentions tenant rights
+    - aggressive: Direct demands, threatens legal action or rent withholding, ultimatums, no softening language
+  labels:
+    - passive
+    - polite
+    - firm
+    - aggressive
+
+output:
+  dir: outputs
+  formats:
+    - json
+    - csv
+    - html
+

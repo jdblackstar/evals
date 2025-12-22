@@ -42,3 +42,6 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["."]
 
+[tool.uv]
+cache-dir = ".uv-cache"
+
