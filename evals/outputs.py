@@ -35,8 +35,13 @@ def _flatten_result_for_csv(result: dict[str, Any]) -> dict[str, Any]:
 
     # Reserved export fields: set these last so they always reflect the true result.
     row["index"] = result.get("index")
-    row["prompt"] = result.get("prompt", "")[:200]  # Truncate
-    row["response"] = result.get("response", "")[:500]  # Truncate
+
+    prompt_value = result.get("prompt") or ""
+    row["prompt"] = str(prompt_value)[:200]  # Truncate safely
+
+    response_value = result.get("response") or ""
+    row["response"] = str(response_value)[:500]  # Truncate safely
+
     row["label"] = result.get("judgment", {}).get("label", "")
     return row
 
