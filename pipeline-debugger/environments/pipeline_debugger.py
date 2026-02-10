@@ -6,11 +6,9 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Any
-
-from datasets import Dataset
 
 import verifiers as vf
+from datasets import Dataset
 from verifier.verify import VerificationResult, verify_submission
 
 TASK_PROMPT_TEMPLATE = """You are debugging a broken Python ETL pipeline.

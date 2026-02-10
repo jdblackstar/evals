@@ -90,7 +90,9 @@ def transform_orders(
     merged["is_high_value"] = merged["net_amount"] >= 1000.0
     merged["processing_status"] = "ok"
 
-    transformed_df = merged[OUTPUT_COLUMNS].sort_values("order_id").reset_index(drop=True)
+    transformed_df = (
+        merged[OUTPUT_COLUMNS].sort_values("order_id").reset_index(drop=True)
+    )
 
     rejected_df = pd.DataFrame(rejected_rows)
     if rejected_df.empty:

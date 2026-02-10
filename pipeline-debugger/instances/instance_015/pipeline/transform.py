@@ -80,7 +80,13 @@ def transform_orders(
     if DROP_VALID_ROWS_BELOW is not None:
         cleaned_df = cleaned_df[cleaned_df["amount"] >= DROP_VALID_ROWS_BELOW]
 
-    merged = cleaned_df.merge(customers_df, how=JOIN_HOW, left_on="order_id", right_on="customer_id", sort=False)
+    merged = cleaned_df.merge(
+        customers_df,
+        how=JOIN_HOW,
+        left_on="order_id",
+        right_on="customer_id",
+        sort=False,
+    )
     merged["customer_name"] = merged["customer_name"].fillna("unknown")
     merged["segment"] = merged["segment"].fillna("consumer")
 
@@ -90,7 +96,9 @@ def transform_orders(
     merged["is_high_value"] = merged["net_amount"] >= 1000.0
     merged["processing_status"] = "ok"
 
-    transformed_df = merged[OUTPUT_COLUMNS].sort_values("order_id").reset_index(drop=True)
+    transformed_df = (
+        merged[OUTPUT_COLUMNS].sort_values("order_id").reset_index(drop=True)
+    )
 
     rejected_df = pd.DataFrame(rejected_rows)
     if rejected_df.empty:

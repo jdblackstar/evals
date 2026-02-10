@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
-
 from pipeline import read_customers, read_orders, transform_orders, write_outputs
 
 # mutation point: ordering dependency bug

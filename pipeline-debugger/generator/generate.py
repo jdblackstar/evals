@@ -128,7 +128,9 @@ def generate_instances(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate broken pipeline-debugger instances.")
+    parser = argparse.ArgumentParser(
+        description="Generate broken pipeline-debugger instances."
+    )
     parser.add_argument(
         "--template-dir",
         type=Path,

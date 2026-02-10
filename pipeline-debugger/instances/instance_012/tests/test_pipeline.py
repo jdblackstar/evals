@@ -64,7 +64,9 @@ def test_row_count_and_completeness(
     assert set(output_df["order_id"].tolist()) == {100, 101, 102, 103}
 
 
-def test_transformation_logic(pipeline_outputs: tuple[pd.DataFrame, pd.DataFrame]) -> None:
+def test_transformation_logic(
+    pipeline_outputs: tuple[pd.DataFrame, pd.DataFrame],
+) -> None:
     output_df, _ = pipeline_outputs
     target = output_df.loc[output_df["order_id"] == 101].iloc[0]
     assert target["customer_name"] == "Northwind"

@@ -31,9 +31,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-c", "--concurrency", type=int, default=3)
     parser.add_argument("--max-instances", type=int, default=15)
     parser.add_argument("--max-turns", type=int, default=25)
-    parser.add_argument("-s", "--save", action="store_true", default=True, help="Pass -s to vf-eval (default: true).")
+    parser.add_argument(
+        "-s",
+        "--save",
+        action="store_true",
+        default=True,
+        help="Pass -s to vf-eval (default: true).",
+    )
     parser.add_argument("--no-save", dest="save", action="store_false")
-    parser.add_argument("--print-command", action="store_true", help="Print vf-eval command and exit.")
+    parser.add_argument(
+        "--print-command", action="store_true", help="Print vf-eval command and exit."
+    )
     return parser
 
 

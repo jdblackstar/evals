@@ -40,7 +40,7 @@ MUTATIONS: dict[str, Mutation] = {
         category="Join logic",
         difficulty="Medium",
         file_path="pipeline/transform.py",
-        find_text='merged = cleaned_df.merge(customers_df, how=JOIN_HOW, on=JOIN_KEY, sort=False)',
+        find_text="merged = cleaned_df.merge(customers_df, how=JOIN_HOW, on=JOIN_KEY, sort=False)",
         replace_text='merged = cleaned_df.merge(customers_df, how=JOIN_HOW, left_on="order_id", right_on="customer_id", sort=False)',
         description="Rows are joined on the wrong key pair.",
     ),
@@ -101,7 +101,9 @@ MUTATIONS: dict[str, Mutation] = {
 }
 
 
-def apply_mutations(instance_dir: Path, mutation_names: Iterable[str]) -> list[Mutation]:
+def apply_mutations(
+    instance_dir: Path, mutation_names: Iterable[str]
+) -> list[Mutation]:
     """Apply selected mutations to copied template files."""
     applied: list[Mutation] = []
     for mutation_name in mutation_names:

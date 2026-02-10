@@ -307,7 +307,9 @@ def verify_submission(submission_dir: Path) -> VerificationResult:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Verify a pipeline-debugger submission.")
+    parser = argparse.ArgumentParser(
+        description="Verify a pipeline-debugger submission."
+    )
     parser.add_argument(
         "submission_dir",
         type=Path,
