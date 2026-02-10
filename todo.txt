@@ -1,0 +1,5 @@
+general
+- eval versions 
+
+pipe-line debugger
+- tunable (and higher) difficulty (easy|medium|hard|expert)
