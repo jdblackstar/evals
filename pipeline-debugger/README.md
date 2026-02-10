@@ -16,9 +16,9 @@ uv run python pipeline-debugger/verifier/verify.py pipeline-debugger/instances/i
 Model eval via `verifiers` (OpenRouter-compatible endpoint example):
 
 ```bash
-uv run python pipeline-debugger/run_eval.py --model openai/gpt-4.1-mini -n 5 -r 1
+uv run python pipeline-debugger/run_eval.py -n 5 -r 1
 ```
-`run_eval.py` loads `OPENROUTER_API_KEY` from repo-root `.env` via `python-dotenv`.
+`run_eval.py` loads `OPENROUTER_API_KEY` from repo-root `.env` via `python-dotenv` and defaults to `openai/gpt-5.2`.
 
 ## 4. What It Reveals
 It surfaces whether a model actually debugs root causes versus reward-hacking shortcuts (editing tests, hardcoding outputs, or shallow fixes), and provides partial-credit telemetry (`tests_passed`, `schema_valid`, `deterministic`, `test_files_untouched`) to analyze failure patterns.

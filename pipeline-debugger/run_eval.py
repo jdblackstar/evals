@@ -15,13 +15,17 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+API_KEY_ENV = "OPENROUTER_API_KEY"
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run pipeline-debugger evals.")
-    parser.add_argument("--model", required=True, help="Model name (for example: openai/gpt-4.1-mini).")
+    parser.add_argument(
+        "--model",
+        default="openai/gpt-5.2",
+        help="Model name (default: openai/gpt-5.2).",
+    )
     parser.add_argument("--base-url", default="https://openrouter.ai/api/v1")
-    parser.add_argument("--api-key-env", default="OPENROUTER_API_KEY")
-    parser.add_argument("--env-file", default=".env", help="Path to .env file (relative to repo root if not absolute).")
     parser.add_argument("-n", "--num-examples", type=int, default=15)
     parser.add_argument("-r", "--rollouts", type=int, default=1)
     parser.add_argument("-c", "--concurrency", type=int, default=3)
@@ -30,11 +34,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-s", "--save", action="store_true", default=True, help="Pass -s to vf-eval (default: true).")
     parser.add_argument("--no-save", dest="save", action="store_false")
     parser.add_argument("--print-command", action="store_true", help="Print vf-eval command and exit.")
-    parser.add_argument(
-        "extra_args",
-        nargs=argparse.REMAINDER,
-        help="Additional args forwarded to vf-eval. Use '--' before these args.",
-    )
     return parser
 
 
@@ -43,26 +42,27 @@ def main() -> int:
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
-    dotenv_path = Path(args.env_file)
-    if not dotenv_path.is_absolute():
-        dotenv_path = repo_root / dotenv_path
+    env_root = repo_root / "pipeline-debugger"
+    dotenv_path = repo_root / ".env"
     load_dotenv(dotenv_path=dotenv_path, override=False)
 
-    api_key = os.getenv(args.api_key_env)
+    api_key = os.getenv(API_KEY_ENV)
     if not api_key:
         print(
-            f"Missing {args.api_key_env}. Add it to {dotenv_path} or export it in your shell.",
+            f"Missing {API_KEY_ENV}. Add it to {dotenv_path} or export it in your shell.",
             file=sys.stderr,
         )
         return 1
 
     vf_args = [
-        "vf-eval",
+        sys.executable,
+        "-m",
+        "verifiers.scripts.eval",
         "pipeline-debugger",
         "-p",
-        "./pipeline-debugger",
+        ".",
         "-k",
-        args.api_key_env,
+        API_KEY_ENV,
         "-b",
         args.base_url,
         "-m",
@@ -78,14 +78,12 @@ def main() -> int:
     ]
     if args.save:
         vf_args.append("-s")
-    if args.extra_args:
-        vf_args.extend(args.extra_args)
 
     if args.print_command:
         print(" ".join(shlex.quote(part) for part in vf_args))
         return 0
 
-    completed = subprocess.run(vf_args, cwd=repo_root, check=False)
+    completed = subprocess.run(vf_args, cwd=env_root, check=False)
     return completed.returncode
 
 

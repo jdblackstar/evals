@@ -2,11 +2,8 @@ from __future__ import annotations
 
 import asyncio
 import json
-import os
-import re
 import shutil
 import subprocess
-import sys
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -41,10 +38,8 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
         instances_dir: str,
         max_instances: int = -1,
         max_turns: int = 25,
-        seed: int = 7,
     ):
         self.instances_dir = Path(instances_dir).resolve()
-        self.seed = seed
         self._workspace_parents: set[str] = set()
         dataset = self._build_dataset(max_instances=max_instances)
 
@@ -248,36 +243,15 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
     ) -> str:
         """Run a shell command in the workspace and return exit code/stdout/stderr."""
         timeout_seconds = max(1, min(timeout_seconds, 120))
-        env = dict(os.environ)
-        python_bin = str(Path(sys.executable).resolve().parent)
-        env["PATH"] = f"{python_bin}:{env.get('PATH', '')}"
-        python_exec = str(Path(sys.executable).resolve())
-        normalized_command = command
-        normalized_command = re.sub(
-            r"(?<!\S)python3(?=\s|$)",
-            python_exec,
-            normalized_command,
-        )
-        normalized_command = re.sub(
-            r"(?<!\S)python(?=\s|$)",
-            python_exec,
-            normalized_command,
-        )
-        normalized_command = re.sub(
-            r"(?<!\S)pytest(?=\s|$)",
-            f"{python_exec} -m pytest",
-            normalized_command,
-        )
         try:
             result = subprocess.run(
-                normalized_command,
+                command,
                 cwd=workspace_root,
                 shell=True,
                 check=False,
                 capture_output=True,
                 text=True,
                 timeout=timeout_seconds,
-                env=env,
             )
         except subprocess.TimeoutExpired as exc:
             payload = {
@@ -345,7 +319,6 @@ def load_environment(
     instances_dir: str | None = None,
     max_instances: int = -1,
     max_turns: int = 25,
-    seed: int = 7,
 ) -> vf.Environment:
     root = Path(__file__).resolve().parents[1]
     resolved_instances_dir = instances_dir or str(root / "instances")
@@ -353,5 +326,4 @@ def load_environment(
         instances_dir=resolved_instances_dir,
         max_instances=max_instances,
         max_turns=max_turns,
-        seed=seed,
     )
