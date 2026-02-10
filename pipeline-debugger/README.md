@@ -7,16 +7,16 @@
 Verification is programmatic and binary on core checks: all instance tests pass, `run_pipeline.py` exits 0, output schema conforms to `expected_schema.json`, outputs are deterministic across two runs, and test files remain unchanged via hash validation (`tests_hashes.json` + before/after hashes).
 
 ## 3. One Command To Run
-From this directory:
+From repo root (`/Users/josh/code/evals`):
 
 ```bash
-uv run python verifier/verify.py instances/instance_001
+uv run python pipeline-debugger/verifier/verify.py pipeline-debugger/instances/instance_001
 ```
 
 Model eval via `verifiers` (OpenRouter-compatible endpoint example):
 
 ```bash
-OPENROUTER_API_KEY=... PYTHONPATH=. uv run vf-eval pipeline-debugger -p . -k OPENROUTER_API_KEY -b https://openrouter.ai/api/v1 -m openai/gpt-4.1-mini -n 5 -r 1
+OPENROUTER_API_KEY=... PYTHONPATH=./pipeline-debugger uv run vf-eval pipeline-debugger -p ./pipeline-debugger -k OPENROUTER_API_KEY -b https://openrouter.ai/api/v1 -m openai/gpt-4.1-mini -n 5 -r 1
 ```
 
 ## 4. What It Reveals

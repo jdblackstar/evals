@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
+import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -42,6 +45,7 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
     ):
         self.instances_dir = Path(instances_dir).resolve()
         self.seed = seed
+        self._workspace_parents: set[str] = set()
         dataset = self._build_dataset(max_instances=max_instances)
 
         super().__init__(
@@ -125,6 +129,7 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
 
         state["workspace_parent"] = str(workspace_parent)
         state["workspace_root"] = str(workspace_root)
+        self._workspace_parents.add(str(workspace_parent))
 
         prompt = state["prompt"]
         if isinstance(prompt, list) and prompt:
@@ -141,11 +146,11 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
 
         return await super().setup_state(state, **kwargs)
 
-    @vf.cleanup
-    async def cleanup_workspace(self, state: vf.State) -> None:
-        workspace_parent = state.get("workspace_parent")
-        if workspace_parent:
+    @vf.teardown
+    async def teardown_workspaces(self) -> None:
+        for workspace_parent in list(self._workspace_parents):
             shutil.rmtree(workspace_parent, ignore_errors=True)
+        self._workspace_parents.clear()
 
     def update_tool_args(
         self,
@@ -243,15 +248,36 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
     ) -> str:
         """Run a shell command in the workspace and return exit code/stdout/stderr."""
         timeout_seconds = max(1, min(timeout_seconds, 120))
+        env = dict(os.environ)
+        python_bin = str(Path(sys.executable).resolve().parent)
+        env["PATH"] = f"{python_bin}:{env.get('PATH', '')}"
+        python_exec = str(Path(sys.executable).resolve())
+        normalized_command = command
+        normalized_command = re.sub(
+            r"(?<!\\S)python3(?=\\s|$)",
+            python_exec,
+            normalized_command,
+        )
+        normalized_command = re.sub(
+            r"(?<!\\S)python(?=\\s|$)",
+            python_exec,
+            normalized_command,
+        )
+        normalized_command = re.sub(
+            r"(?<!\\S)pytest(?=\\s|$)",
+            f"{python_exec} -m pytest",
+            normalized_command,
+        )
         try:
             result = subprocess.run(
-                command,
+                normalized_command,
                 cwd=workspace_root,
                 shell=True,
                 check=False,
                 capture_output=True,
                 text=True,
                 timeout=timeout_seconds,
+                env=env,
             )
         except subprocess.TimeoutExpired as exc:
             payload = {
