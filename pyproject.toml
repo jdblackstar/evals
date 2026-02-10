@@ -9,3 +9,6 @@ dependencies = [
     "pandas>=2.2.0",
     "pytest>=8.0.0",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["pipeline-debugger"]

@@ -8,15 +8,9 @@ Run date: February 9, 2026.
 
 ## Reproduction Command
 ```bash
-OPENROUTER_API_KEY=... PYTHONPATH=./pipeline-debugger uv run vf-eval pipeline-debugger \
-  -p ./pipeline-debugger \
-  -k OPENROUTER_API_KEY \
-  -b https://openrouter.ai/api/v1 \
-  -m <model> \
-  -n 15 -r 1 -c 3 \
-  -a '{"max_instances": 15, "max_turns": 25}' \
-  -s
+uv run python pipeline-debugger/run_eval.py --model <model> -n 15 -r 1 -c 3 --max-instances 15 --max-turns 25
 ```
+`run_eval.py` loads `OPENROUTER_API_KEY` from repo-root `.env` via `python-dotenv`.
 
 ## Results
 | Model | Pass rate | Avg tests_passed | Schema valid rate | Deterministic rate | Test files untouched rate | Avg tokens | Avg tool calls |
