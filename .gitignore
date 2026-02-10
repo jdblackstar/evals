@@ -6,12 +6,19 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
-.venv
-.uv-cache
-
-# Environment variables
+# Secrets
 .env
 
+# Logs
+logs/
+
+# Caches
+.pytest_cache/
+.ruff_cache/
+.uv-cache/
+
+# Virtual environments
+.venv
+
 # Eval artifacts
-outputs/
+**/outputs/
