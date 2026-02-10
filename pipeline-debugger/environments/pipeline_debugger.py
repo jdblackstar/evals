@@ -254,17 +254,17 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
         python_exec = str(Path(sys.executable).resolve())
         normalized_command = command
         normalized_command = re.sub(
-            r"(?<!\\S)python3(?=\\s|$)",
+            r"(?<!\S)python3(?=\s|$)",
             python_exec,
             normalized_command,
         )
         normalized_command = re.sub(
-            r"(?<!\\S)python(?=\\s|$)",
+            r"(?<!\S)python(?=\s|$)",
             python_exec,
             normalized_command,
         )
         normalized_command = re.sub(
-            r"(?<!\\S)pytest(?=\\s|$)",
+            r"(?<!\S)pytest(?=\s|$)",
             f"{python_exec} -m pytest",
             normalized_command,
         )

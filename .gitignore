@@ -8,6 +8,10 @@ wheels/
 
 # Virtual environments
 .venv
+.uv-cache
 
 # Environment variables
 .env
+
+# Eval artifacts
+outputs/
