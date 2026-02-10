@@ -1,0 +1,28 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Aggregation",
+      "description": "Discount ignores segment and applies a flat 1% rate.",
+      "difficulty": "Medium",
+      "file_path": "pipeline/transform.py",
+      "name": "aggregation"
+    },
+    {
+      "category": "Join logic",
+      "description": "Rows are joined on the wrong key pair.",
+      "difficulty": "Medium",
+      "file_path": "pipeline/transform.py",
+      "name": "join_logic"
+    },
+    {
+      "category": "Type coercion",
+      "description": "Amount is truncated to integer, corrupting numeric precision.",
+      "difficulty": "Easy",
+      "file_path": "pipeline/transform.py",
+      "name": "type_coercion"
+    }
+  ],
+  "instance_id": "instance_005",
+  "seed": 7
+}

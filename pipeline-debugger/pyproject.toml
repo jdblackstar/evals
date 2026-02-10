@@ -1,0 +1,32 @@
+[project]
+name = "pipeline-debugger"
+version = "0.1.0"
+description = "Prime Intellect pipeline-debugger environment for verifiers"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "verifiers>=0.1.9.post3",
+  "pandas>=2.2.0",
+  "pytest>=8.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = [
+  "pipeline_debugger.py",
+  "environments/**",
+  "verifier/**",
+  "generator/**",
+  "instances/**",
+  "tests/**",
+  "env_config.yaml",
+  "README.md",
+  "eval_report.md",
+]
+
+[tool.verifiers.eval]
+num_examples = 5
+rollouts_per_example = 1

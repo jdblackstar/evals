@@ -1,0 +1,14 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Join logic",
+      "description": "Rows are joined on the wrong key pair.",
+      "difficulty": "Medium",
+      "file_path": "pipeline/transform.py",
+      "name": "join_logic"
+    }
+  ],
+  "instance_id": "instance_013",
+  "seed": 7
+}

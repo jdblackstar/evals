@@ -1,0 +1,11 @@
+id: pipeline-debugger
+name: Pipeline Debugger
+description: Diagnose and repair a broken ETL pipeline in a writable workspace.
+entrypoint: pipeline_debugger:load_environment
+supported_modes:
+  - eval
+  - rl
+framework: verifiers
+default_env_args:
+  max_instances: 15
+  max_turns: 25
