@@ -10,13 +10,13 @@ Verification is programmatic and binary on core checks: all instance tests pass,
 From repo root (`/Users/josh/code/evals`):
 
 ```bash
-uv run python pipeline-debugger/verifier/verify.py pipeline-debugger/instances/instance_001
+uv run python evals/pipeline-debugger/verifier/verify.py evals/pipeline-debugger/instances/instance_001
 ```
 
 Model eval via `verifiers` (OpenRouter-compatible endpoint example):
 
 ```bash
-uv run python pipeline-debugger/run_eval.py -n 5 -r 1
+uv run python evals/pipeline-debugger/run_eval.py -n 5 -r 1
 ```
 `run_eval.py` loads `OPENROUTER_API_KEY` from repo-root `.env` via `python-dotenv` and defaults to `openai/gpt-5.2`.
 

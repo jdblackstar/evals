@@ -8,7 +8,7 @@ Run date: February 9, 2026.
 
 ## Reproduction Command
 ```bash
-uv run python pipeline-debugger/run_eval.py --model <model> -n 15 -r 1 -c 3 --max-instances 15 --max-turns 25
+uv run python evals/pipeline-debugger/run_eval.py --model <model> -n 15 -r 1 -c 3 --max-instances 15 --max-turns 25
 ```
 `run_eval.py` loads `OPENROUTER_API_KEY` from repo-root `.env` via `python-dotenv` and defaults to `openai/gpt-5.2`.
 
@@ -21,7 +21,7 @@ uv run python pipeline-debugger/run_eval.py --model <model> -n 15 -r 1 -c 3 --ma
 *Token usage is not persisted in current `results.jsonl` schema produced by this setup, so exact average tokens per rollout were not recoverable post-run.
 
 Saved run artifacts:
-- `pipeline-debugger/outputs/evals/pipeline-debugger--openai--gpt-5.2/d2945591`
+- `evals/pipeline-debugger/outputs/evals/pipeline-debugger--openai--gpt-5.2/d2945591`
 - `outputs/evals/pipeline-debugger--deepseek--deepseek-chat/60c3898b`
 
 ## Failure Mode Breakdown (Template)

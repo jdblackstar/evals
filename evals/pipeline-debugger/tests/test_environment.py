@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import os
+import subprocess
+import sys
 from pathlib import Path
 
 from environments.pipeline_debugger import PipelineDebuggerEnv, load_environment
@@ -33,3 +36,19 @@ def test_environment_registers_expected_tools() -> None:
         "run_command",
         "write_file",
     ]
+
+
+def test_entrypoint_importable_from_env_root() -> None:
+    env = dict(os.environ)
+    env.pop("PYTHONPATH", None)
+    result = subprocess.run(
+        [sys.executable, "-c", "import pipeline_debugger"],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, (
+        f"entrypoint import failed\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+    )

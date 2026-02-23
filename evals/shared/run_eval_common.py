@@ -1,8 +1,3 @@
-"""Run pipeline-debugger evals against an OpenAI-compatible endpoint.
-
-Loads OPENROUTER_API_KEY from the repo root .env via python-dotenv.
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -18,19 +13,28 @@ from dotenv import load_dotenv
 API_KEY_ENV = "OPENROUTER_API_KEY"
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run pipeline-debugger evals.")
+def _build_parser(
+    *,
+    description: str,
+    default_model: str,
+    default_num_examples: int,
+    default_rollouts: int,
+    default_concurrency: int,
+    default_max_instances: int,
+    default_max_turns: int,
+) -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
         "--model",
-        default="openai/gpt-5.2",
-        help="Model name (default: openai/gpt-5.2).",
+        default=default_model,
+        help=f"Model name (default: {default_model}).",
     )
     parser.add_argument("--base-url", default="https://openrouter.ai/api/v1")
-    parser.add_argument("-n", "--num-examples", type=int, default=15)
-    parser.add_argument("-r", "--rollouts", type=int, default=1)
-    parser.add_argument("-c", "--concurrency", type=int, default=3)
-    parser.add_argument("--max-instances", type=int, default=15)
-    parser.add_argument("--max-turns", type=int, default=25)
+    parser.add_argument("-n", "--num-examples", type=int, default=default_num_examples)
+    parser.add_argument("-r", "--rollouts", type=int, default=default_rollouts)
+    parser.add_argument("-c", "--concurrency", type=int, default=default_concurrency)
+    parser.add_argument("--max-instances", type=int, default=default_max_instances)
+    parser.add_argument("--max-turns", type=int, default=default_max_turns)
     parser.add_argument(
         "-s",
         "--save",
@@ -45,12 +49,29 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main() -> int:
-    parser = build_parser()
+def run_eval_main(
+    *,
+    env_id: str,
+    env_root: Path,
+    repo_root: Path,
+    default_model: str,
+    default_num_examples: int,
+    default_rollouts: int,
+    default_concurrency: int,
+    default_max_instances: int,
+    default_max_turns: int,
+) -> int:
+    parser = _build_parser(
+        description=f"Run {env_id} evals.",
+        default_model=default_model,
+        default_num_examples=default_num_examples,
+        default_rollouts=default_rollouts,
+        default_concurrency=default_concurrency,
+        default_max_instances=default_max_instances,
+        default_max_turns=default_max_turns,
+    )
     args = parser.parse_args()
 
-    repo_root = Path(__file__).resolve().parents[1]
-    env_root = repo_root / "pipeline-debugger"
     dotenv_path = repo_root / ".env"
     load_dotenv(dotenv_path=dotenv_path, override=False)
 
@@ -66,7 +87,7 @@ def main() -> int:
         sys.executable,
         "-m",
         "verifiers.scripts.eval",
-        "pipeline-debugger",
+        env_id,
         "-p",
         ".",
         "-k",
@@ -93,7 +114,3 @@ def main() -> int:
 
     completed = subprocess.run(vf_args, cwd=env_root, check=False)
     return completed.returncode
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

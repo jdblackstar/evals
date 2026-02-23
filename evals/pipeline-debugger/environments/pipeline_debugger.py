@@ -1,15 +1,20 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import shutil
-import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
 import verifiers as vf
 from datasets import Dataset
 from verifier.verify import VerificationResult, verify_submission
+
+SHARED_ROOT = Path(__file__).resolve().parents[2]
+if str(SHARED_ROOT) not in sys.path:
+    sys.path.insert(0, str(SHARED_ROOT))
+from shared.workspace_tools import WorkspaceToolMixin
+
 
 TASK_PROMPT_TEMPLATE = """You are debugging a broken Python ETL pipeline.
 
@@ -30,7 +35,7 @@ __INITIAL_TREE__
 """
 
 
-class PipelineDebuggerEnv(vf.StatefulToolEnv):
+class PipelineDebuggerEnv(WorkspaceToolMixin, vf.StatefulToolEnv):
     def __init__(
         self,
         instances_dir: str,
@@ -92,24 +97,6 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
 
         return Dataset.from_list(rows)
 
-    def _resolve_path(self, workspace_root: str, rel_path: str) -> Path:
-        root = Path(workspace_root).resolve()
-        candidate = (root / rel_path).resolve()
-        if not str(candidate).startswith(str(root)):
-            raise ValueError("path escapes workspace root")
-        return candidate
-
-    def _render_tree(self, workspace_root: Path, max_entries: int = 120) -> str:
-        entries: list[str] = []
-        for path in sorted(workspace_root.rglob("*")):
-            if len(entries) >= max_entries:
-                entries.append("... (truncated)")
-                break
-            rel = path.relative_to(workspace_root)
-            suffix = "/" if path.is_dir() else ""
-            entries.append(f"- {rel}{suffix}")
-        return "\n".join(entries)
-
     async def setup_state(self, state: vf.State, **kwargs) -> vf.State:
         instance_path = Path(state["info"]["instance_path"]).resolve()
         instance_id = str(state["info"]["instance_id"])
@@ -132,7 +119,8 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
                 "__WORKSPACE_ROOT__", str(workspace_root)
             )
             user_content = user_content.replace(
-                "__INITIAL_TREE__", self._render_tree(workspace_root)
+                "__INITIAL_TREE__",
+                self._render_workspace_tree(workspace_root, max_entries=120),
             )
             prompt[-1]["content"] = user_content
             state["prompt"] = prompt
@@ -164,24 +152,11 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
         workspace_root: str = "",
     ) -> str:
         """List files/directories under `path` (workspace-relative)."""
-        target = self._resolve_path(workspace_root, path)
-
-        if not target.exists():
-            return f"error: path does not exist: {path}"
-
-        root = Path(workspace_root).resolve()
-        if target.is_file():
-            return str(target.relative_to(root))
-
-        entries: list[str] = []
-        for child in sorted(target.rglob("*")):
-            if len(entries) >= max_entries:
-                entries.append("... (truncated)")
-                break
-            rel = child.relative_to(root)
-            suffix = "/" if child.is_dir() else ""
-            entries.append(f"{rel}{suffix}")
-        return "\n".join(entries) if entries else "(empty directory)"
+        return self._workspace_list_files(
+            path=path,
+            max_entries=max_entries,
+            workspace_root=workspace_root,
+        )
 
     def read_file(
         self,
@@ -191,25 +166,20 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
         workspace_root: str = "",
     ) -> str:
         """Read a text file with line numbers."""
-        target = self._resolve_path(workspace_root, path)
-        if not target.exists() or not target.is_file():
-            return f"error: file not found: {path}"
-
-        lines = target.read_text().splitlines()
-        start = max(start_line, 1)
-        end = max(end_line, start)
-        selected = lines[start - 1 : end]
-        rendered = [f"{idx + start:04d}: {line}" for idx, line in enumerate(selected)]
-        if not rendered:
-            return "(no content)"
-        return "\n".join(rendered)
+        return self._workspace_read_file(
+            path=path,
+            start_line=start_line,
+            end_line=end_line,
+            workspace_root=workspace_root,
+        )
 
     def write_file(self, path: str, content: str, workspace_root: str = "") -> str:
         """Overwrite a text file with `content`."""
-        target = self._resolve_path(workspace_root, path)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content)
-        return f"wrote {len(content)} chars to {path}"
+        return self._workspace_write_file(
+            path=path,
+            content=content,
+            workspace_root=workspace_root,
+        )
 
     def replace_text(
         self,
@@ -220,18 +190,13 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
         workspace_root: str = "",
     ) -> str:
         """Replace text in a file. Returns number of replacements applied."""
-        target = self._resolve_path(workspace_root, path)
-        if not target.exists() or not target.is_file():
-            return f"error: file not found: {path}"
-
-        before = target.read_text()
-        if old_text not in before:
-            return "error: old_text not found"
-
-        after = before.replace(old_text, new_text, count)
-        target.write_text(after)
-        replacements = before.count(old_text) - after.count(old_text)
-        return f"replaced {replacements} occurrence(s) in {path}"
+        return self._workspace_replace_text(
+            path=path,
+            old_text=old_text,
+            new_text=new_text,
+            count=count,
+            workspace_root=workspace_root,
+        )
 
     def run_command(
         self,
@@ -240,31 +205,12 @@ class PipelineDebuggerEnv(vf.StatefulToolEnv):
         workspace_root: str = "",
     ) -> str:
         """Run a shell command in the workspace and return exit code/stdout/stderr."""
-        timeout_seconds = max(1, min(timeout_seconds, 120))
-        try:
-            result = subprocess.run(
-                command,
-                cwd=workspace_root,
-                shell=True,
-                check=False,
-                capture_output=True,
-                text=True,
-                timeout=timeout_seconds,
-            )
-        except subprocess.TimeoutExpired as exc:
-            payload = {
-                "exit_code": -1,
-                "stdout": exc.stdout or "",
-                "stderr": f"timeout after {timeout_seconds}s",
-            }
-            return json.dumps(payload, indent=2)
-
-        payload = {
-            "exit_code": result.returncode,
-            "stdout": result.stdout[-8000:],
-            "stderr": result.stderr[-8000:],
-        }
-        return json.dumps(payload, indent=2)
+        return self._workspace_run_command(
+            command=command,
+            timeout_seconds=timeout_seconds,
+            workspace_root=workspace_root,
+            output_limit=8000,
+        )
 
     async def _verification_result(self, state: vf.State) -> VerificationResult:
         if "verification_result" not in state:
