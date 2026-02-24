@@ -1,0 +1,14 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Config/env",
+      "description": "Reader delimiter is configured incorrectly.",
+      "difficulty": "Easy-Medium",
+      "file_path": "pipeline/extract.py",
+      "name": "config_env"
+    }
+  ],
+  "instance_id": "instance_008",
+  "seed": 7
+}

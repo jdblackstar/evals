@@ -1,0 +1,21 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Config/env",
+      "description": "Reader delimiter is configured incorrectly.",
+      "difficulty": "Easy-Medium",
+      "file_path": "pipeline/extract.py",
+      "name": "config_env"
+    },
+    {
+      "category": "Join logic",
+      "description": "Rows are joined on the wrong key pair.",
+      "difficulty": "Medium",
+      "file_path": "pipeline/transform.py",
+      "name": "join_logic"
+    }
+  ],
+  "instance_id": "instance_006",
+  "seed": 7
+}

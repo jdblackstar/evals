@@ -1,0 +1,14 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Config/env",
+      "description": "Load step writes output to an unexpected filename.",
+      "difficulty": "Easy",
+      "file_path": "pipeline/load.py",
+      "name": "wrong_output_path"
+    }
+  ],
+  "instance_id": "instance_003",
+  "seed": 7
+}

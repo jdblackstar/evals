@@ -1,0 +1,14 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Silent data loss",
+      "description": "Valid rows below threshold are silently dropped.",
+      "difficulty": "Hard",
+      "file_path": "pipeline/transform.py",
+      "name": "silent_data_loss"
+    }
+  ],
+  "instance_id": "instance_007",
+  "seed": 7
+}

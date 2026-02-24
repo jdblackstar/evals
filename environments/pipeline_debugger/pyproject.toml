@@ -1,0 +1,21 @@
+[project]
+name = "pipeline-debugger"
+description = "Diagnose and fix broken ETL pipelines with tool use and verifier-based scoring."
+tags = ["eval", "debugging", "tools"]
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "verifiers>=0.1.9.post3",
+  "pandas>=2.2.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = ["pipeline_debugger/**", "README.md", "pyproject.toml"]
+
+[tool.verifiers.eval]
+num_examples = 15
+rollouts_per_example = 1

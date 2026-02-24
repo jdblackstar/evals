@@ -1,0 +1,28 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Aggregation",
+      "description": "Discount ignores segment and applies a flat 1% rate.",
+      "difficulty": "Medium",
+      "file_path": "pipeline/transform.py",
+      "name": "aggregation"
+    },
+    {
+      "category": "Silent data loss",
+      "description": "Valid rows below threshold are silently dropped.",
+      "difficulty": "Hard",
+      "file_path": "pipeline/transform.py",
+      "name": "silent_data_loss"
+    },
+    {
+      "category": "Config/env",
+      "description": "Load step writes output to an unexpected filename.",
+      "difficulty": "Easy",
+      "file_path": "pipeline/load.py",
+      "name": "wrong_output_path"
+    }
+  ],
+  "instance_id": "instance_009",
+  "seed": 7
+}

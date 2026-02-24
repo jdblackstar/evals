@@ -1,0 +1,5 @@
+customer_id,customer_name,segment
+1,Acme Labs,smb
+2,Northwind,enterprise
+3,Blue Shop,consumer
+4,Orbit Inc,smb

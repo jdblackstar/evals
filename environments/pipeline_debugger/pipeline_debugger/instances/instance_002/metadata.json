@@ -1,0 +1,14 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Aggregation",
+      "description": "Discount ignores segment and applies a flat 1% rate.",
+      "difficulty": "Medium",
+      "file_path": "pipeline/transform.py",
+      "name": "aggregation"
+    }
+  ],
+  "instance_id": "instance_002",
+  "seed": 7
+}

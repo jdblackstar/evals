@@ -1,0 +1,21 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Config/env",
+      "description": "Reader delimiter is configured incorrectly.",
+      "difficulty": "Easy-Medium",
+      "file_path": "pipeline/extract.py",
+      "name": "config_env"
+    },
+    {
+      "category": "Config/env",
+      "description": "Load step writes output to an unexpected filename.",
+      "difficulty": "Easy",
+      "file_path": "pipeline/load.py",
+      "name": "wrong_output_path"
+    }
+  ],
+  "instance_id": "instance_011",
+  "seed": 7
+}

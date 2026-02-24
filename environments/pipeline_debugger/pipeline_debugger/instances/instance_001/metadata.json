@@ -1,0 +1,14 @@
+{
+  "attempt": 1,
+  "bugs": [
+    {
+      "category": "Error handling",
+      "description": "Malformed row now crashes the entire pipeline.",
+      "difficulty": "Medium",
+      "file_path": "pipeline/transform.py",
+      "name": "error_handling"
+    }
+  ],
+  "instance_id": "instance_001",
+  "seed": 7
+}
