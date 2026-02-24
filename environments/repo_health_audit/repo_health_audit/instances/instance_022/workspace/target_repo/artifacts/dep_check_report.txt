@@ -1,0 +1,19 @@
+Dependency Check Report
+=======================
+Date: 2026-01-20
+Tool: OWASP dependency-check (offline DB)
+
+Summary:
+- Total dependencies scanned: 15
+- Vulnerabilities found: 6 (2 high, 4 medium)
+- No critical vulnerabilities.
+
+Notable findings:
+1. sqlalchemy 2.0.10 — SQL injection risk in text() API
+2. psycopg2-binary 2.9.6 — buffer overflow in COPY
+3. Hardcoded database credentials in lib/db.py
+4. No .env or secrets management configuration detected
+5. No CSP or CORS hardening in API service
+
+Recommendation: Upgrade sqlalchemy and psycopg2-binary. Migrate credentials
+to environment variables or a secrets manager.

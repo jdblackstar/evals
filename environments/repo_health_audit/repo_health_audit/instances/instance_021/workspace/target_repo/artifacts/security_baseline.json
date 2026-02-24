@@ -1,0 +1,41 @@
+{
+  "captured_at": "2026-01-18",
+  "tool": "manual review + osv-scanner partial",
+  "note": "trivy unavailable; partial scan only",
+  "critical": 1,
+  "high": 3,
+  "medium": 5,
+  "findings": [
+    {
+      "severity": "critical",
+      "package": "cryptography",
+      "version": "41.0.0",
+      "cve": "CVE-2024-26130",
+      "description": "NULL pointer dereference in PKCS12 parsing"
+    },
+    {
+      "severity": "high",
+      "package": "pyjwt",
+      "version": "2.6.0",
+      "cve": "CVE-2024-33663",
+      "description": "Algorithm confusion with asymmetric keys"
+    },
+    {
+      "severity": "high",
+      "package": "grpcio",
+      "version": "1.54.0",
+      "cve": "CVE-2023-44487",
+      "description": "HTTP/2 rapid reset vulnerability"
+    },
+    {
+      "severity": "high",
+      "package": "sqlalchemy",
+      "version": "2.0.10",
+      "cve": "CVE-2024-XXXX",
+      "description": "SQL injection in text() with unescaped parameters"
+    }
+  ],
+  "secrets_detected": [
+    "packages/auth/tokens.py: hardcoded SECRET_KEY"
+  ]
+}

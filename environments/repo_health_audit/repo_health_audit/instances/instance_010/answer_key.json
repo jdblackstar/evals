@@ -1,0 +1,66 @@
+{
+  "instance_id": "instance_010",
+  "tier": 1,
+  "expected": {
+    "instance_id": "instance_010",
+    "tier": 1,
+    "audit.python_file_count": 5,
+    "audit.test_case_count": 4,
+    "audit.dependency_count": 3,
+    "audit.coverage_percent": 91.2,
+    "audit.dockerfile_count": 0,
+    "audit.terraform_module_count": 0,
+    "audit.circular_dependencies": "no",
+    "audit.error_handling_consistent": "yes",
+    "audit.config_multi_env_ready": "yes",
+    "tooling.canonical_test_command": "python -m pytest tests/",
+    "tooling.canonical_coverage_command": "python -m pytest tests/ --cov=src/cli --cov-report=term"
+  },
+  "factual_fields": [
+    "instance_id",
+    "tier",
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count"
+  ],
+  "judgment_fields": [
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready"
+  ],
+  "tooling_fields": [
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "required_gap_fields": [],
+  "required_blocked_tools": [],
+  "required_fallback_methods": [],
+  "null_fields": [],
+  "tolerances": {
+    "audit.coverage_percent": 1.0
+  },
+  "evidence_requirements": {
+    "audit.python_file_count": [
+      "target_repo"
+    ],
+    "audit.dependency_count": [
+      "target_repo/setup.py"
+    ],
+    "audit.coverage_percent": [
+      "target_repo/artifacts/coverage_report.txt"
+    ],
+    "audit.config_multi_env_ready": [
+      "target_repo/src/cli/commands.py"
+    ]
+  },
+  "thresholds": {
+    "factual_accuracy": 1.0,
+    "judgment_accuracy": 1.0,
+    "tooling_accuracy": 1.0,
+    "degradation_handling": 1.0,
+    "evidence_grounding": 1.0
+  }
+}

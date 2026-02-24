@@ -1,0 +1,76 @@
+{
+  "instance_id": "instance_019",
+  "tier": 4,
+  "expected": {
+    "instance_id": "instance_019",
+    "tier": 4,
+    "audit.python_file_count": 6,
+    "audit.test_case_count": 6,
+    "audit.dependency_count": 7,
+    "audit.coverage_percent": null,
+    "audit.dockerfile_count": 2,
+    "audit.terraform_module_count": 1,
+    "audit.circular_dependencies": "no",
+    "audit.error_handling_consistent": "yes",
+    "audit.config_multi_env_ready": "no",
+    "audit.security_posture": "moderate",
+    "audit.deployment_readiness": "partial",
+    "audit.observability_maturity": "weak",
+    "tooling.canonical_test_command": "./scripts/test_backend.sh",
+    "tooling.canonical_coverage_command": "coverage run -m pytest backend/tests && coverage report"
+  },
+  "factual_fields": [
+    "instance_id",
+    "tier",
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count"
+  ],
+  "judgment_fields": [
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready",
+    "audit.security_posture",
+    "audit.deployment_readiness",
+    "audit.observability_maturity"
+  ],
+  "tooling_fields": [
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "required_gap_fields": [
+    "audit.coverage_percent"
+  ],
+  "required_blocked_tools": [
+    "coverage"
+  ],
+  "required_fallback_methods": [
+    "reviewed artifacts/dep_audit.txt"
+  ],
+  "null_fields": [
+    "audit.coverage_percent"
+  ],
+  "tolerances": {},
+  "evidence_requirements": {
+    "audit.coverage_percent": [
+      "coverage",
+      "scripts/test_backend.sh"
+    ],
+    "audit.security_posture": [
+      "target_repo/artifacts/dep_audit.txt"
+    ],
+    "tooling.canonical_test_command": [
+      "target_repo/README.md"
+    ]
+  },
+  "thresholds": {
+    "factual_accuracy": 1.0,
+    "judgment_accuracy": 0.8,
+    "tooling_accuracy": 0.9,
+    "degradation_handling": 1.0,
+    "evidence_grounding": 0.8
+  }
+}

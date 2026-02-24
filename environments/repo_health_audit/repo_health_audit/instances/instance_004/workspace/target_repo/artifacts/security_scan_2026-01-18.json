@@ -1,0 +1,7 @@
+{
+  "scan_date": "2026-01-18",
+  "critical": 1,
+  "high": 2,
+  "medium": 3,
+  "notes": "Critical image CVE unresolved in worker base layer."
+}

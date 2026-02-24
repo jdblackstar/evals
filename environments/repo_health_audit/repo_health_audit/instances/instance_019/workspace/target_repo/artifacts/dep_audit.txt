@@ -1,0 +1,14 @@
+Dependency Audit Report
+Date: 2026-02-05
+Tool: pip-audit (manual run)
+
+Findings:
+- flask 3.0.3: no known vulnerabilities
+- sqlalchemy 2.0.31: no known vulnerabilities
+- marshmallow 3.21.3: no known vulnerabilities
+- celery 5.4.0: 1 moderate severity issue (GHSA-xxxx) — DoS via crafted task payload
+- redis 5.0.7: no known vulnerabilities
+- gunicorn 22.0.0: no known vulnerabilities
+- python-dotenv 1.0.1: no known vulnerabilities
+
+Summary: 1 moderate issue found. No critical or high severity vulnerabilities.

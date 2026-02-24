@@ -1,0 +1,12 @@
+{
+  "instance_id": "instance_015",
+  "tier": 3,
+  "title": "Nx-style workspace monorepo",
+  "task_notes": [
+    "This is a Tier 3 monorepo with an Nx-style workspace layout under packages/.",
+    "Circular dependencies exist: api imports from worker and worker imports from api via shared.",
+    "Coverage is reported in a combined artifact file at artifacts/coverage_combined.txt.",
+    "Use the test and coverage commands documented in target_repo/README.md.",
+    "workspace.json is a JSON config file, not a Python file."
+  ]
+}

@@ -1,0 +1,7 @@
+Name                              Stmts   Miss  Cover   Missing
+----------------------------------------------------------------
+src/processor/pipeline.py            24      6    75%   22-27
+src/processor/transforms.py          18      3    83%   20-22
+src/processor/io.py                  27      7    74%   18, 24-29
+----------------------------------------------------------------
+TOTAL                                69     16    76.8%

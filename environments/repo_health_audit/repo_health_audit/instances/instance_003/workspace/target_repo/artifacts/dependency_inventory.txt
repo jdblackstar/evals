@@ -1,0 +1,4 @@
+packages/orders/pyproject.toml dependencies=3
+packages/billing/pyproject.toml dependencies=4
+libs/common/pyproject.toml dependencies=2
+repo_total_dependencies=9

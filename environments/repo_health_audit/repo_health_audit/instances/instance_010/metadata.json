@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_010",
+  "tier": 1,
+  "title": "CLI tool with Click",
+  "task_notes": [
+    "This instance should be straightforward: standard CLI tool layout with direct commands.",
+    "Use the test and coverage commands documented in target_repo/README.md.",
+    "Prefer concrete counts from repository files over assumptions."
+  ]
+}

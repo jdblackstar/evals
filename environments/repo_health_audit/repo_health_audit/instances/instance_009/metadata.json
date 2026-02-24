@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_009",
+  "tier": 1,
+  "title": "Flask web application",
+  "task_notes": [
+    "This instance should be straightforward: standard Flask app layout with direct commands.",
+    "Use the test and coverage commands documented in target_repo/README.md.",
+    "Prefer concrete counts from repository files over assumptions."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_003",
+  "tier": 3,
+  "title": "Monorepo with ambiguous signals",
+  "task_notes": [
+    "Multiple packages publish separate commands and outputs.",
+    "Coverage outputs conflict; pick the canonical one documented for audits.",
+    "Architectural calls should be grounded in cross-package evidence."
+  ]
+}

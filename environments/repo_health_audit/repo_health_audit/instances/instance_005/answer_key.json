@@ -1,0 +1,85 @@
+{
+  "instance_id": "instance_005",
+  "tier": 5,
+  "expected": {
+    "instance_id": "instance_005",
+    "tier": 5,
+    "audit.python_file_count": 12,
+    "audit.test_case_count": 21,
+    "audit.dependency_count": 17,
+    "audit.coverage_percent": 68.4,
+    "audit.dockerfile_count": 3,
+    "audit.terraform_module_count": 3,
+    "audit.circular_dependencies": "inconclusive",
+    "audit.error_handling_consistent": "no",
+    "audit.config_multi_env_ready": "no",
+    "audit.security_posture": "weak",
+    "audit.deployment_readiness": "partial",
+    "audit.observability_maturity": "moderate",
+    "tooling.canonical_test_command": "python build/dispatch.py test --suite full",
+    "tooling.canonical_coverage_command": "python build/dispatch.py test --suite full --coverage"
+  },
+  "factual_fields": [
+    "instance_id",
+    "tier",
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count"
+  ],
+  "judgment_fields": [
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready",
+    "audit.security_posture",
+    "audit.deployment_readiness",
+    "audit.observability_maturity"
+  ],
+  "tooling_fields": [
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "required_gap_fields": [
+    "audit.circular_dependencies"
+  ],
+  "required_blocked_tools": [
+    "pydeps",
+    "semgrep"
+  ],
+  "required_fallback_methods": [
+    "used artifacts/import_graph_snapshot.txt",
+    "used artifacts/osv_snapshot_2026-02-01.json"
+  ],
+  "null_fields": [],
+  "tolerances": {
+    "audit.coverage_percent": 1.0
+  },
+  "evidence_requirements": {
+    "audit.circular_dependencies": [
+      "target_repo/scripts/check_cycles.sh",
+      "target_repo/artifacts/import_graph_snapshot.txt"
+    ],
+    "audit.security_posture": [
+      "target_repo/artifacts/osv_snapshot_2026-02-01.json",
+      "target_repo/artifacts/internal_sca_2025-10-10.txt"
+    ],
+    "audit.config_multi_env_ready": [
+      "target_repo/services/fulfillment/config.py"
+    ],
+    "audit.deployment_readiness": [
+      "target_repo/artifacts/deployment_readiness.md"
+    ],
+    "audit.observability_maturity": [
+      "target_repo/artifacts/observability_review.md"
+    ]
+  },
+  "thresholds": {
+    "factual_accuracy": 0.9,
+    "judgment_accuracy": 0.7,
+    "tooling_accuracy": 0.9,
+    "degradation_handling": 0.9,
+    "evidence_grounding": 0.7
+  }
+}

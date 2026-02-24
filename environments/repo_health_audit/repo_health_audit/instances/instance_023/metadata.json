@@ -1,0 +1,11 @@
+{
+  "instance_id": "instance_023",
+  "tier": 5,
+  "title": "CI-driven monorepo with contradictory coverage",
+  "task_notes": [
+    "Use .ci/run_tests.py for canonical test and coverage workflows.",
+    "Three coverage artifacts exist (unit, integration, combined); use combined as canonical.",
+    "Cycle-detection tooling is unavailable; inspect code and artifacts for circular imports.",
+    "Security scanning tool (trivy) is blocked; rely on artifacts/vuln_scan_2026-01-15.json."
+  ]
+}

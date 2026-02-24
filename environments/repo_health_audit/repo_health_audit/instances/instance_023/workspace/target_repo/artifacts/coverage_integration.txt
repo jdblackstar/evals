@@ -1,0 +1,16 @@
+Coverage report (integration tests only)
+=========================================
+Run date: 2026-01-18
+Environment: CI runner, Python 3.11.7, Elasticsearch 7.17, Redis 7.0
+
+services/auth/handler.py       55.0%
+services/auth/store.py         68.2%
+services/search/indexer.py     70.1%
+services/search/query.py       50.0%
+services/ingest/parser.py      60.0%
+services/ingest/validator.py   55.3%
+services/common/events.py      80.0%
+
+TOTAL (integration only)       62.1%
+
+WARNING: This covers only integration tests. See coverage_combined.txt for canonical numbers.

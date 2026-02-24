@@ -1,0 +1,77 @@
+{
+  "instance_id": "instance_003",
+  "tier": 3,
+  "expected": {
+    "instance_id": "instance_003",
+    "tier": 3,
+    "audit.python_file_count": 11,
+    "audit.test_case_count": 6,
+    "audit.dependency_count": 9,
+    "audit.coverage_percent": 77.4,
+    "audit.dockerfile_count": 2,
+    "audit.terraform_module_count": 1,
+    "audit.circular_dependencies": "yes",
+    "audit.error_handling_consistent": "no",
+    "audit.config_multi_env_ready": "no",
+    "audit.security_posture": "moderate",
+    "audit.deployment_readiness": "partial",
+    "audit.observability_maturity": "moderate",
+    "tooling.canonical_test_command": "nox -s monorepo_tests",
+    "tooling.canonical_coverage_command": "nox -s coverage_gate"
+  },
+  "factual_fields": [
+    "instance_id",
+    "tier",
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count"
+  ],
+  "judgment_fields": [
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready",
+    "audit.security_posture",
+    "audit.deployment_readiness",
+    "audit.observability_maturity"
+  ],
+  "tooling_fields": [
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "required_gap_fields": [],
+  "required_blocked_tools": [],
+  "required_fallback_methods": [],
+  "null_fields": [],
+  "tolerances": {
+    "audit.coverage_percent": 1.0
+  },
+  "evidence_requirements": {
+    "audit.circular_dependencies": [
+      "target_repo/packages/orders/src/orders/deps.py",
+      "target_repo/packages/billing/src/billing/deps.py"
+    ],
+    "audit.coverage_percent": [
+      "target_repo/artifacts/coverage_nox.txt",
+      "nox -s coverage_gate"
+    ],
+    "tooling.canonical_test_command": [
+      "target_repo/README.md"
+    ],
+    "audit.dependency_count": [
+      "target_repo/artifacts/dependency_inventory.txt"
+    ],
+    "audit.config_multi_env_ready": [
+      "target_repo/packages/billing/src/billing/config.py"
+    ]
+  },
+  "thresholds": {
+    "factual_accuracy": 1.0,
+    "judgment_accuracy": 0.9,
+    "tooling_accuracy": 1.0,
+    "degradation_handling": 1.0,
+    "evidence_grounding": 0.9
+  }
+}

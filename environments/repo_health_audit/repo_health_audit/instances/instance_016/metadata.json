@@ -1,0 +1,12 @@
+{
+  "instance_id": "instance_016",
+  "tier": 3,
+  "title": "Service mesh monorepo",
+  "task_notes": [
+    "This is a Tier 3 monorepo with a service mesh architecture under services/.",
+    "Each service has its own requirements.txt plus a root requirements.txt.",
+    "The canonical dependency count comes from the root requirements.txt (10 deps).",
+    "Orchestration is via Makefile targets: make test-all and make coverage.",
+    "The libs/common/config.py demonstrates environment-based configuration."
+  ]
+}

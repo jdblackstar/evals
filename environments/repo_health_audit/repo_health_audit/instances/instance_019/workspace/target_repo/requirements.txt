@@ -1,0 +1,7 @@
+flask==3.0.3
+sqlalchemy==2.0.31
+marshmallow==3.21.3
+celery==5.4.0
+redis==5.0.7
+gunicorn==22.0.0
+python-dotenv==1.0.1

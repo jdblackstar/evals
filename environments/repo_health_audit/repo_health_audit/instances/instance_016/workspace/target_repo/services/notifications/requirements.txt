@@ -1,0 +1,4 @@
+# Notifications-specific deps
+celery>=5.3.0
+redis>=5.0.0
+structlog>=23.2.0

@@ -1,0 +1,11 @@
+{
+  "instance_id": "instance_021",
+  "tier": 5,
+  "title": "Bazel-like custom build system monorepo",
+  "task_notes": [
+    "Use build/buildtool.py for canonical test and coverage workflows.",
+    "Coverage artifacts are contradictory between local and CI; prefer CI coverage.",
+    "Cycle-detection tooling is unavailable; reason from artifacts/import_graph.txt.",
+    "Security scanning tool (trivy) is blocked; rely on artifacts/security_baseline.json."
+  ]
+}

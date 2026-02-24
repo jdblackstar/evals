@@ -1,0 +1,15 @@
+Generated import graph (partial — pydeps unavailable, extracted via grep):
+- services/auth/handler.py -> services/common/events.py
+- services/auth/handler.py -> services/auth/store.py
+- services/common/events.py -> services/auth/store.py   *** CYCLE ***
+- services/search/indexer.py -> services/common/events.py
+- services/ingest/parser.py -> (stdlib: json)
+- services/ingest/validator.py -> (no internal imports)
+
+Cycle detected:
+  services/auth/handler.py imports services/common/events.py
+  services/common/events.py imports services/auth/store.py
+  services/auth/handler.py imports services/auth/store.py
+  This is a clear circular dependency between auth and common packages.
+
+Status: partial graph (dynamic imports unresolved), but cycle is confirmed.

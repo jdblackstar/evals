@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "output_file": "audit_report.json",
+  "required_top_level_keys": [
+    "instance_id",
+    "tier",
+    "audit",
+    "tooling",
+    "measurement_gaps",
+    "evidence",
+    "summary"
+  ],
+  "audit_fields": {
+    "python_file_count": "integer|null",
+    "test_case_count": "integer|null",
+    "dependency_count": "integer|null",
+    "coverage_percent": "number|null",
+    "dockerfile_count": "integer|null",
+    "terraform_module_count": "integer|null",
+    "circular_dependencies": "yes|no|inconclusive|null",
+    "error_handling_consistent": "yes|no|inconclusive|null",
+    "config_multi_env_ready": "yes|no|inconclusive|null",
+    "security_posture": "strong|moderate|weak|inconclusive|null",
+    "deployment_readiness": "ready|partial|not_ready|inconclusive|null",
+    "observability_maturity": "strong|moderate|weak|inconclusive|null"
+  },
+  "required_fields_for_this_instance": [
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count",
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready",
+    "audit.security_posture",
+    "audit.deployment_readiness",
+    "audit.observability_maturity",
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "degradation_rule": "If a field cannot be measured, set it to null or inconclusive and record the field in measurement_gaps with reason.",
+  "evidence_rule": "evidence should map audit field names (e.g. \"audit.python_file_count\") to lists of strings citing file paths or commands used. Example: {\"audit.python_file_count\": [\"Found 5 .py files in target_repo/src\"], \"audit.dependency_count\": [\"Counted from target_repo/pyproject.toml\"]}"
+}

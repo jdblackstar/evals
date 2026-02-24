@@ -1,0 +1,4 @@
+run_id=2026-02-01T03:21:10Z
+suite=all passed=6 failed=0 skipped=2
+line_coverage=81.5
+branch_coverage=70.0

@@ -1,0 +1,17 @@
+Coverage report (combined — unit + integration)
+=================================================
+Run date: 2026-01-18
+Environment: CI runner, Python 3.11.7, Elasticsearch 7.17, Redis 7.0
+
+services/auth/handler.py       72.4%
+services/auth/store.py         70.8%
+services/search/indexer.py     75.2%
+services/search/query.py       68.0%
+services/ingest/parser.py      66.7%
+services/ingest/validator.py   69.3%
+services/common/events.py      71.4%
+conftest.py                    55.0%
+
+TOTAL                          68.9%
+
+This is the canonical combined coverage for the platform.

@@ -1,0 +1,17 @@
+---------- coverage: platform linux, python 3.11.7-final-0 ----------
+Name                                       Stmts   Miss  Cover
+--------------------------------------------------------------
+pipelines/ingest/__init__.py                   2      0   100%
+pipelines/ingest/source.py                    25      7    72%
+pipelines/ingest/validate.py                  18      4    78%
+pipelines/transform/__init__.py                2      0   100%
+pipelines/transform/clean.py                  28      6    79%
+pipelines/transform/aggregate.py              16      5    69%
+pipelines/export/__init__.py                   1      0   100%
+pipelines/export/sink.py                      22      9    59%
+shared/__init__.py                             1      0   100%
+shared/schemas.py                             15      5    67%
+--------------------------------------------------------------
+TOTAL                                        130     36    75.3%
+
+CI pipeline run #847 - 2024-12-15T03:22:00Z

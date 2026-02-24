@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_014",
+  "tier": 2,
+  "title": "Legacy Django project",
+  "task_notes": [
+    "Django project with manage.py as the entry point for tests and management commands.",
+    "Tests are split between mysite/blog/tests.py and mysite/tests/test_urls.py.",
+    "A Dockerfile is present; coverage artifact is in artifacts/coverage_output.txt."
+  ]
+}

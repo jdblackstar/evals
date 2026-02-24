@@ -1,0 +1,12 @@
+{
+  "instance_id": "instance_017",
+  "tier": 3,
+  "title": "Data platform monorepo",
+  "task_notes": [
+    "This is a Tier 3 data pipeline monorepo with ingest, transform, and export stages.",
+    "There are TWO conflicting coverage files in artifacts/. The canonical one is coverage_ci.txt as documented in README.",
+    "Build orchestration uses nox (noxfile.py is a Python file and should be counted).",
+    "Use the test and coverage commands documented in target_repo/README.md.",
+    "The noxfile.py at the repo root counts as a Python file."
+  ]
+}

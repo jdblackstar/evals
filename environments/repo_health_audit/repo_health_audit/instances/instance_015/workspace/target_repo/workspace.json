@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "projects": {
+    "api": {
+      "root": "packages/api",
+      "sourceRoot": "packages/api/src",
+      "targets": {
+        "build": {
+          "executor": "docker:build",
+          "options": {
+            "dockerfile": "packages/api/Dockerfile"
+          }
+        },
+        "test": {
+          "executor": "pytest",
+          "options": {
+            "testPath": "packages/api/tests"
+          }
+        }
+      }
+    },
+    "worker": {
+      "root": "packages/worker",
+      "sourceRoot": "packages/worker/src",
+      "targets": {
+        "build": {
+          "executor": "docker:build",
+          "options": {
+            "dockerfile": "packages/worker/Dockerfile"
+          }
+        },
+        "test": {
+          "executor": "pytest",
+          "options": {
+            "testPath": "packages/worker/tests"
+          }
+        }
+      }
+    },
+    "shared": {
+      "root": "packages/shared",
+      "sourceRoot": "packages/shared/src"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "instance_id": "instance_004",
+  "tier": 4,
+  "expected": {
+    "instance_id": "instance_004",
+    "tier": 4,
+    "audit.python_file_count": 5,
+    "audit.test_case_count": 9,
+    "audit.dependency_count": 8,
+    "audit.coverage_percent": null,
+    "audit.dockerfile_count": 2,
+    "audit.terraform_module_count": 2,
+    "audit.circular_dependencies": "no",
+    "audit.error_handling_consistent": "no",
+    "audit.config_multi_env_ready": "yes",
+    "audit.security_posture": "weak",
+    "audit.deployment_readiness": "not_ready",
+    "audit.observability_maturity": "weak",
+    "tooling.canonical_test_command": "./scripts/run_tests.sh",
+    "tooling.canonical_coverage_command": "poetry run pytest services --cov=services --cov-report=term"
+  },
+  "factual_fields": [
+    "instance_id",
+    "tier",
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count"
+  ],
+  "judgment_fields": [
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready",
+    "audit.security_posture",
+    "audit.deployment_readiness",
+    "audit.observability_maturity"
+  ],
+  "tooling_fields": [
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "required_gap_fields": [
+    "audit.coverage_percent"
+  ],
+  "required_blocked_tools": [
+    "poetry",
+    "trivy"
+  ],
+  "required_fallback_methods": [
+    "reviewed artifacts/security_scan_2026-01-18.json"
+  ],
+  "null_fields": [
+    "audit.coverage_percent"
+  ],
+  "tolerances": {},
+  "evidence_requirements": {
+    "audit.coverage_percent": [
+      "poetry: command not found",
+      "target_repo/scripts/run_coverage.sh"
+    ],
+    "audit.security_posture": [
+      "target_repo/artifacts/security_scan_2026-01-18.json"
+    ],
+    "audit.deployment_readiness": [
+      "target_repo/artifacts/ops_notes.md"
+    ],
+    "tooling.canonical_test_command": [
+      "target_repo/README.md"
+    ]
+  },
+  "thresholds": {
+    "factual_accuracy": 1.0,
+    "judgment_accuracy": 0.8,
+    "tooling_accuracy": 0.9,
+    "degradation_handling": 1.0,
+    "evidence_grounding": 0.8
+  }
+}

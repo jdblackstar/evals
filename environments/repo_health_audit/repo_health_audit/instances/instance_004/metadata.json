@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_004",
+  "tier": 4,
+  "title": "Polyglot repo with missing tools",
+  "task_notes": [
+    "Repository includes Python, SQL, Docker, Terraform, and shell scripts.",
+    "Some expected tools are intentionally unavailable; do not fabricate measurements.",
+    "Record blocked tools and fallback methods explicitly."
+  ]
+}

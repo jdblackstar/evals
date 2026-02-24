@@ -1,0 +1,7 @@
+{
+  "captured_at": "2026-02-01",
+  "critical": 0,
+  "high": 1,
+  "medium": 2,
+  "packages": ["requests", "urllib3"]
+}

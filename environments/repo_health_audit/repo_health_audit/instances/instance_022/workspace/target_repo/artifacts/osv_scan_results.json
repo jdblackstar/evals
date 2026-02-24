@@ -1,0 +1,37 @@
+{
+  "captured_at": "2026-01-20",
+  "tool": "osv-scanner",
+  "critical": 0,
+  "high": 2,
+  "medium": 4,
+  "findings": [
+    {
+      "severity": "high",
+      "package": "sqlalchemy",
+      "version": "2.0.10",
+      "advisory": "GHSA-xxxx-yyyy-zzzz",
+      "description": "SQL injection via unescaped text() parameters"
+    },
+    {
+      "severity": "high",
+      "package": "psycopg2-binary",
+      "version": "2.9.6",
+      "advisory": "GHSA-aaaa-bbbb-cccc",
+      "description": "Buffer overflow in COPY protocol handler"
+    },
+    {
+      "severity": "medium",
+      "package": "numpy",
+      "version": "1.25.0",
+      "advisory": "GHSA-dddd-eeee-ffff",
+      "description": "Denial of service via malformed .npy file"
+    },
+    {
+      "severity": "medium",
+      "package": "boto3",
+      "version": "1.28.0",
+      "advisory": "GHSA-gggg-hhhh-iiii",
+      "description": "Credential leakage in debug logging mode"
+    }
+  ]
+}

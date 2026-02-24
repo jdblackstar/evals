@@ -1,0 +1,9 @@
+{
+  "scan_date": "2026-02-10",
+  "tool": "snyk",
+  "critical": 2,
+  "high": 3,
+  "medium": 5,
+  "low": 8,
+  "notes": "Critical vulnerabilities found in Go worker dependencies. Python API base image has unpatched CVEs."
+}

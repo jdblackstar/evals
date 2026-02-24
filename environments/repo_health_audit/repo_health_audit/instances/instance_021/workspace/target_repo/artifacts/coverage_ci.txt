@@ -1,0 +1,15 @@
+Coverage report (CI pipeline)
+=============================
+Run date: 2026-01-22
+Environment: Ubuntu 22.04, Python 3.11.7
+Fixtures: PostgreSQL testcontainer, Redis testcontainer
+
+packages/auth        74.3%
+packages/billing     68.9%
+packages/gateway     70.1%
+packages/shared      82.4%
+
+TOTAL                71.6%
+
+Note: CI coverage is the canonical measurement. Local coverage inflated
+due to SQLite stub bypassing several integration code paths.

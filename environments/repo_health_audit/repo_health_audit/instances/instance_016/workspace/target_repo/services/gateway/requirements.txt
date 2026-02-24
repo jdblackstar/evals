@@ -1,0 +1,4 @@
+# Gateway-specific deps (most come from root requirements.txt)
+flask>=3.0.0
+requests>=2.31.0
+pyjwt>=2.8.0

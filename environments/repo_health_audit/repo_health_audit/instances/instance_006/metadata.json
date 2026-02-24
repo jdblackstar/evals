@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_006",
+  "tier": 0,
+  "title": "Single-file script",
+  "task_notes": [
+    "Trivial repo with only main.py and README.md.",
+    "No tests, no dependencies, no Docker or Terraform.",
+    "Do not fabricate counts or infer hidden complexity."
+  ]
+}

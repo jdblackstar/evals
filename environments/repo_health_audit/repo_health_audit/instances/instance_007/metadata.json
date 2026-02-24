@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_007",
+  "tier": 0,
+  "title": "Misleading directory names",
+  "task_notes": [
+    "Empty tests/, infra/, and docker/ directories contain only .gitkeep files.",
+    "Only 2 Python files exist in src/.",
+    "Do not count empty directories as having content."
+  ]
+}

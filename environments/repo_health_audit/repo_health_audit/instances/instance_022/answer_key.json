@@ -1,0 +1,82 @@
+{
+  "instance_id": "instance_022",
+  "tier": 5,
+  "expected": {
+    "instance_id": "instance_022",
+    "tier": 5,
+    "audit.python_file_count": 15,
+    "audit.test_case_count": 12,
+    "audit.dependency_count": 15,
+    "audit.coverage_percent": 64.7,
+    "audit.dockerfile_count": 2,
+    "audit.terraform_module_count": 3,
+    "audit.circular_dependencies": "no",
+    "audit.error_handling_consistent": "no",
+    "audit.config_multi_env_ready": "no",
+    "audit.security_posture": "weak",
+    "audit.deployment_readiness": "partial",
+    "audit.observability_maturity": "weak",
+    "tooling.canonical_test_command": "make test",
+    "tooling.canonical_coverage_command": "make coverage"
+  },
+  "factual_fields": [
+    "instance_id",
+    "tier",
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count"
+  ],
+  "judgment_fields": [
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready",
+    "audit.security_posture",
+    "audit.deployment_readiness",
+    "audit.observability_maturity"
+  ],
+  "tooling_fields": [
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "required_gap_fields": [],
+  "required_blocked_tools": [
+    "semgrep",
+    "bandit"
+  ],
+  "required_fallback_methods": [
+    "used artifacts/osv_scan_results.json",
+    "used artifacts/dep_check_report.txt"
+  ],
+  "null_fields": [],
+  "tolerances": {
+    "audit.coverage_percent": 1.0
+  },
+  "evidence_requirements": {
+    "audit.security_posture": [
+      "target_repo/artifacts/osv_scan_results.json",
+      "target_repo/artifacts/dep_check_report.txt"
+    ],
+    "audit.config_multi_env_ready": [
+      "target_repo/services/etl/extract.py"
+    ],
+    "audit.deployment_readiness": [
+      "target_repo/artifacts/deployment_review.md"
+    ],
+    "audit.observability_maturity": [
+      "target_repo/artifacts/observability_audit.md"
+    ],
+    "audit.coverage_percent": [
+      "target_repo/artifacts/coverage_combined.txt"
+    ]
+  },
+  "thresholds": {
+    "factual_accuracy": 0.9,
+    "judgment_accuracy": 0.7,
+    "tooling_accuracy": 0.9,
+    "degradation_handling": 0.9,
+    "evidence_grounding": 0.7
+  }
+}

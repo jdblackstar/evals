@@ -1,0 +1,17 @@
+Coverage report (combined — all services)
+==========================================
+Run date: 2026-01-25
+Environment: CI runner, Python 3.11.7
+Database: PostgreSQL 15.4 testcontainer
+
+services/etl/extract.py        58.3%
+services/etl/transform.py      82.1%
+services/etl/load.py            61.0%
+services/api/app.py             71.4%
+services/api/schemas.py         90.0%
+services/scheduler/cron.py      45.2%
+lib/db.py                       55.0%
+
+TOTAL                           64.7%
+
+Note: This is the canonical combined coverage for the platform.

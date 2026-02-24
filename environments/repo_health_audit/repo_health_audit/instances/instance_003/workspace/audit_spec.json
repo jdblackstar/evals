@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "output_file": "audit_report.json",
+  "required_top_level_keys": [
+    "instance_id",
+    "tier",
+    "audit",
+    "tooling",
+    "measurement_gaps",
+    "evidence",
+    "summary"
+  ],
+  "required_fields_for_this_instance": [
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count",
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready",
+    "audit.security_posture",
+    "audit.deployment_readiness",
+    "audit.observability_maturity",
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "degradation_rule": "Use null/inconclusive with explicit measurement_gaps for blocked or unresolvable measurements.",
+  "evidence_rule": "evidence should map audit field names (e.g. \"audit.python_file_count\") to lists of strings citing file paths or commands used. Example: {\"audit.python_file_count\": [\"Found 5 .py files in target_repo/src\"], \"audit.dependency_count\": [\"Counted from target_repo/pyproject.toml\"]}"
+}

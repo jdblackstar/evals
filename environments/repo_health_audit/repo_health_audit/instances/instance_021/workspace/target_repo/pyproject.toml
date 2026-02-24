@@ -1,0 +1,23 @@
+[project]
+name = "nexus-monorepo"
+version = "1.0.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "sqlalchemy",
+    "redis",
+    "celery",
+    "structlog",
+    "httpx",
+    "tenacity",
+    "cryptography",
+    "pyjwt",
+    "boto3",
+    "grpcio",
+    "protobuf",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["packages"]

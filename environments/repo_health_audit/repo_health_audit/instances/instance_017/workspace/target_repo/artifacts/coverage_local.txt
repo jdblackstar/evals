@@ -1,0 +1,17 @@
+---------- coverage: platform darwin, python 3.11.7-final-0 ----------
+Name                                       Stmts   Miss  Cover
+--------------------------------------------------------------
+pipelines/ingest/__init__.py                   2      0   100%
+pipelines/ingest/source.py                    25      3    88%
+pipelines/ingest/validate.py                  18      2    89%
+pipelines/transform/__init__.py                2      0   100%
+pipelines/transform/clean.py                  28      4    86%
+pipelines/transform/aggregate.py              16      2    88%
+pipelines/export/__init__.py                   1      0   100%
+pipelines/export/sink.py                      22      5    77%
+shared/__init__.py                             1      0   100%
+shared/schemas.py                             15      5    67%
+--------------------------------------------------------------
+TOTAL                                        130     21    82.1%
+
+NOTE: This is a local run. CI coverage may differ due to environment.

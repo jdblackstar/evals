@@ -1,0 +1,5 @@
+Generated import graph (partial):
+- services/payments -> libs/shared
+- services/fulfillment -> libs/shared
+- platform/observability -> services/payments
+Status: partial graph only (dynamic imports unresolved)

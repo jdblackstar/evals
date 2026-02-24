@@ -1,0 +1,8 @@
+{
+  "services/payments": 5,
+  "services/fulfillment": 4,
+  "platform/observability": 3,
+  "libs/shared": 2,
+  "build-system": 3,
+  "total": 17
+}

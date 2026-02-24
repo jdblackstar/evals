@@ -1,0 +1,9 @@
+Name                          Stmts   Miss  Cover
+---------------------------------------------------
+taskrunner/__init__.py            2      0   100%
+taskrunner/core.py               18      3    83%
+taskrunner/scheduler.py          14      4    71%
+taskrunner/worker.py             12      2    83%
+taskrunner/config.py              5      2    60%
+---------------------------------------------------
+TOTAL                            51     11    79.1%

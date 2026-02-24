@@ -1,0 +1,74 @@
+{
+  "instance_id": "instance_014",
+  "tier": 2,
+  "expected": {
+    "instance_id": "instance_014",
+    "tier": 2,
+    "audit.python_file_count": 12,
+    "audit.test_case_count": 5,
+    "audit.dependency_count": 5,
+    "audit.coverage_percent": 67.2,
+    "audit.dockerfile_count": 1,
+    "audit.terraform_module_count": 0,
+    "audit.circular_dependencies": "no",
+    "audit.error_handling_consistent": "no",
+    "audit.config_multi_env_ready": "no",
+    "audit.deployment_readiness": "partial",
+    "tooling.canonical_test_command": "python manage.py test",
+    "tooling.canonical_coverage_command": "coverage run manage.py test && coverage report"
+  },
+  "factual_fields": [
+    "instance_id",
+    "tier",
+    "audit.python_file_count",
+    "audit.test_case_count",
+    "audit.dependency_count",
+    "audit.coverage_percent",
+    "audit.dockerfile_count",
+    "audit.terraform_module_count"
+  ],
+  "judgment_fields": [
+    "audit.circular_dependencies",
+    "audit.error_handling_consistent",
+    "audit.config_multi_env_ready",
+    "audit.deployment_readiness"
+  ],
+  "tooling_fields": [
+    "tooling.canonical_test_command",
+    "tooling.canonical_coverage_command"
+  ],
+  "required_gap_fields": [],
+  "required_blocked_tools": [],
+  "required_fallback_methods": [],
+  "null_fields": [],
+  "tolerances": {
+    "audit.coverage_percent": 1.0
+  },
+  "evidence_requirements": {
+    "audit.python_file_count": [
+      "target_repo"
+    ],
+    "audit.dependency_count": [
+      "target_repo/requirements.txt"
+    ],
+    "audit.coverage_percent": [
+      "target_repo/artifacts/coverage_output.txt"
+    ],
+    "audit.dockerfile_count": [
+      "target_repo/Dockerfile"
+    ],
+    "audit.config_multi_env_ready": [
+      "target_repo/mysite/settings.py"
+    ],
+    "tooling.canonical_test_command": [
+      "target_repo/README.md"
+    ]
+  },
+  "thresholds": {
+    "factual_accuracy": 1.0,
+    "judgment_accuracy": 1.0,
+    "tooling_accuracy": 1.0,
+    "degradation_handling": 1.0,
+    "evidence_grounding": 1.0
+  }
+}

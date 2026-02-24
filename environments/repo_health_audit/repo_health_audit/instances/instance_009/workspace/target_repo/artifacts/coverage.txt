@@ -1,0 +1,7 @@
+Name                          Stmts   Miss  Cover
+--------------------------------------------------
+src/webapp/app.py                12      3    75%
+src/webapp/models.py             32      4    88%
+src/webapp/routes.py             35      7    80%
+--------------------------------------------------
+TOTAL                            79     14    82.3%

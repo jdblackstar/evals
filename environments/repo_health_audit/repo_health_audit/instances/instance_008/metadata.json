@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_008",
+  "tier": 0,
+  "title": "README overpromises",
+  "task_notes": [
+    "README claims tests, Docker, and Terraform exist but they do not.",
+    "Code is just 3 Python files with pyproject.toml listing 2 deps.",
+    "Trust file inspection over README claims."
+  ]
+}

@@ -1,0 +1,11 @@
+[project]
+name = "flask-webapp"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.0.0",
+    "sqlalchemy>=2.0.31",
+    "gunicorn>=22.0.0",
+    "python-dotenv>=1.0.0",
+    "marshmallow>=3.21.0",
+]

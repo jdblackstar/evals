@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_012",
+  "tier": 2,
+  "title": "Flat namespace Python package",
+  "task_notes": [
+    "Flat layout (no src/ directory); package lives directly in taskrunner/.",
+    "Tests live in specs/ rather than tests/; use the Makefile for canonical commands.",
+    "Coverage artifact is in artifacts/coverage.txt."
+  ]
+}

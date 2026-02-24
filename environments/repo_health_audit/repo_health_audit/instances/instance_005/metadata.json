@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_005",
+  "tier": 5,
+  "title": "Complex monorepo with custom build system",
+  "task_notes": [
+    "Use build/dispatch.py for canonical test and coverage workflows.",
+    "Static-analysis tooling is partially unavailable; reason across multiple artifacts.",
+    "Cross-cutting judgments (security, deployment, observability) must be evidence-backed."
+  ]
+}

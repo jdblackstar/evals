@@ -1,0 +1,2 @@
+runner=nox-coverage-gate
+TOTAL 77.4%

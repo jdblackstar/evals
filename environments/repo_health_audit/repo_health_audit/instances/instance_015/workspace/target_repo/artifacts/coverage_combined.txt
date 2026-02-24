@@ -1,0 +1,13 @@
+---------- coverage: platform linux, python 3.11.7-final-0 ----------
+Name                                    Stmts   Miss  Cover
+-----------------------------------------------------------
+packages/api/src/__init__.py                3      0   100%
+packages/api/src/server.py                 15      4    73%
+packages/api/src/handlers.py               18      6    67%
+packages/worker/src/__init__.py             2      0   100%
+packages/worker/src/tasks.py               12      3    75%
+packages/worker/src/queue.py               10      4    60%
+packages/shared/src/__init__.py             1      0   100%
+packages/shared/src/models.py               8      1    88%
+-----------------------------------------------------------
+TOTAL                                      69     18    73.5%

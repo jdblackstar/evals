@@ -1,0 +1,13 @@
+run_id=2026-01-15T10:45:22Z
+suite=verify passed=4 failed=0 skipped=0
+
+Name                                Stmts   Miss  Cover
+--------------------------------------------------------
+plugins/__init__.py                     1      0   100%
+plugins/base.py                        14      1    93%
+plugins/loader.py                      18      5    72%
+plugins/builtins/__init__.py            1      0   100%
+plugins/builtins/csv_plugin.py         12      1    92%
+plugins/builtins/json_plugin.py        10      1    90%
+--------------------------------------------------------
+TOTAL                                  56      8    84.6%

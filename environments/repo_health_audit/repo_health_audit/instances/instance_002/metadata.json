@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_002",
+  "tier": 2,
+  "title": "Medium non-standard Python layout",
+  "task_notes": [
+    "Repository structure is non-standard (engine/, qa/specs/, tooling/).",
+    "Makefile delegates to tooling/qa_runner.py; parse outputs carefully.",
+    "A few fields require interpretation, not just raw counts."
+  ]
+}

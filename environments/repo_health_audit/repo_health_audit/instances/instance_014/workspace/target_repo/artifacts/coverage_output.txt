@@ -1,0 +1,13 @@
+Name                          Stmts   Miss  Cover
+---------------------------------------------------
+manage.py                         8      2    75%
+mysite/__init__.py                0      0   100%
+mysite/settings.py               18      0   100%
+mysite/urls.py                    4      0   100%
+mysite/wsgi.py                    4      2    50%
+mysite/blog/__init__.py           0      0   100%
+mysite/blog/admin.py              5      1    80%
+mysite/blog/models.py            10      2    80%
+mysite/blog/views.py              8      4    50%
+---------------------------------------------------
+TOTAL                            57     11    67.2%

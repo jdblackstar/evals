@@ -1,0 +1,25 @@
+[project]
+name = "beacon-search-platform"
+version = "3.0.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "elasticsearch",
+    "redis",
+    "celery",
+    "pydantic",
+    "sqlalchemy",
+    "structlog",
+    "httpx",
+    "tenacity",
+    "cryptography",
+    "pyjwt",
+    "boto3",
+    "grpcio",
+    "protobuf",
+    "click",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["services"]

@@ -1,0 +1,15 @@
+Generated import graph (partial — pydeps unavailable, extracted via grep):
+- packages/auth/service.py -> packages/shared/types.py
+- packages/auth/service.py -> packages/auth/tokens.py
+- packages/billing/invoice.py -> packages/shared/types.py
+- packages/billing/payments.py -> packages/shared/types.py
+- packages/gateway/router.py -> (external: fastapi)
+
+Indirect pattern observed:
+  auth -> shared -> (shared.types used by billing)
+  billing -> shared -> (shared.types used by auth)
+  This creates an ambiguous diamond through shared. Whether this constitutes
+  a circular dependency depends on whether shared is treated as a boundary
+  or a pass-through.
+
+Status: partial graph only (dynamic imports and BUILD deps unresolved)

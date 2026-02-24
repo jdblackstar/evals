@@ -1,0 +1,5 @@
+scan_date=2025-10-10
+critical=0
+high=0
+medium=0
+note=stale database snapshot

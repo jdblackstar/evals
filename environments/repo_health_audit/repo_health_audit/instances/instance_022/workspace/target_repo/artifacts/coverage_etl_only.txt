@@ -1,0 +1,13 @@
+Coverage report (ETL service only)
+===================================
+Run date: 2026-01-25
+Environment: CI runner, Python 3.11.7
+
+services/etl/extract.py        85.7%
+services/etl/transform.py      95.3%
+services/etl/load.py            86.2%
+
+TOTAL (ETL only)                89.1%
+
+WARNING: This report covers only ETL. It does NOT include API, scheduler,
+or shared lib coverage. Use artifacts/coverage_combined.txt for platform-wide numbers.

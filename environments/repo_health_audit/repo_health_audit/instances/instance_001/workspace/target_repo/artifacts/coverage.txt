@@ -1,0 +1,7 @@
+Name                         Stmts   Miss  Cover
+------------------------------------------------
+src/ledger/api.py               10      1    90%
+src/ledger/config.py             6      1    83%
+src/ledger/service.py           24      2    92%
+------------------------------------------------
+TOTAL                           40      4    88.6%

@@ -1,0 +1,11 @@
+{
+  "instance_id": "instance_022",
+  "tier": 5,
+  "title": "Makefile-orchestrated polyglot data platform",
+  "task_notes": [
+    "Use Makefile targets for canonical test and coverage workflows.",
+    "Coverage artifacts include per-service and combined reports; use combined.",
+    "Security scanning tools (semgrep, bandit) are unavailable; use fallback artifacts.",
+    "SQL migration files and shell scripts are present but are not Python."
+  ]
+}

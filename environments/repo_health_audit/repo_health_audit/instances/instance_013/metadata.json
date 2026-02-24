@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_013",
+  "tier": 2,
+  "title": "Plugin architecture",
+  "task_notes": [
+    "Plugin-based architecture with nested builtins/ directory under plugins/.",
+    "Tests live in verify/ and are run via a custom shell script run_checks.sh.",
+    "Dependencies are declared in requirements.txt, not pyproject.toml."
+  ]
+}

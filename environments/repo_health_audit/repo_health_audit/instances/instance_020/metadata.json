@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_020",
+  "tier": 4,
+  "title": "Polyglot repo with missing tools",
+  "task_notes": [
+    "Repository includes a Python orchestrator and Rust compute engine with Docker and Terraform.",
+    "Some expected tools are intentionally unavailable; do not fabricate measurements.",
+    "Record blocked tools and fallback methods explicitly."
+  ]
+}

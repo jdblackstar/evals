@@ -1,0 +1,41 @@
+{
+  "captured_at": "2026-01-15",
+  "tool": "osv-scanner (trivy unavailable)",
+  "note": "trivy blocked; fallback to osv-scanner with offline DB",
+  "critical": 1,
+  "high": 2,
+  "medium": 3,
+  "findings": [
+    {
+      "severity": "critical",
+      "package": "cryptography",
+      "version": "41.0.0",
+      "cve": "CVE-2024-26130",
+      "description": "NULL pointer dereference in PKCS12 parsing"
+    },
+    {
+      "severity": "high",
+      "package": "pyjwt",
+      "version": "2.6.0",
+      "cve": "CVE-2024-33663",
+      "description": "Algorithm confusion with asymmetric keys"
+    },
+    {
+      "severity": "high",
+      "package": "grpcio",
+      "version": "1.54.0",
+      "cve": "CVE-2023-44487",
+      "description": "HTTP/2 rapid reset vulnerability"
+    },
+    {
+      "severity": "medium",
+      "package": "redis",
+      "version": "4.5.0",
+      "advisory": "GHSA-xxxx-yyyy-zzzz",
+      "description": "Denial of service via crafted RESP protocol message"
+    }
+  ],
+  "secrets_detected": [
+    "services/auth/handler.py: hardcoded AUTH_ENDPOINT"
+  ]
+}

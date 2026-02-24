@@ -1,0 +1,10 @@
+{
+  "instance_id": "instance_001",
+  "tier": 1,
+  "title": "Single-package Python service",
+  "task_notes": [
+    "This instance should be straightforward: standard Python layout and direct commands.",
+    "Use the test and coverage commands documented in target_repo/README.md.",
+    "Prefer concrete counts from repository files over assumptions."
+  ]
+}

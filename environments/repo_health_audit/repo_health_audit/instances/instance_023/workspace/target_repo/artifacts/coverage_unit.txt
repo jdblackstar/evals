@@ -1,0 +1,16 @@
+Coverage report (unit tests only)
+==================================
+Run date: 2026-01-18
+Environment: CI runner, Python 3.11.7
+
+services/auth/handler.py       81.2%
+services/auth/store.py         75.0%
+services/search/indexer.py     83.3%
+services/search/query.py       90.0%
+services/ingest/parser.py      77.8%
+services/ingest/validator.py   85.7%
+services/common/events.py      60.0%
+
+TOTAL (unit only)              78.3%
+
+WARNING: This covers only unit tests. See coverage_combined.txt for canonical numbers.
