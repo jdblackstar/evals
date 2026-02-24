@@ -1,6 +1,0 @@
-__pycache__/
-.pytest_cache/
-**/__pycache__/
-**/.pytest_cache/
-instances/**/outputs/
-generator/template_pipeline/outputs/
