@@ -11,9 +11,19 @@ dependencies = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["evals", "evals/pipeline-debugger"]
+pythonpath = ["environments/pipeline_debugger", "environments/repo_health_audit"]
+testpaths = [
+    "environments/pipeline_debugger/tests",
+    "environments/repo_health_audit/tests",
+]
 addopts = "--import-mode=importlib"
-norecursedirs = ["instances", "outputs", ".venv", ".uv-cache", "generator/template_pipeline"]
+norecursedirs = [
+    "instances",
+    "outputs",
+    ".venv",
+    ".uv-cache",
+    "generator/template_pipeline",
+]
 
 [dependency-groups]
 dev = [
