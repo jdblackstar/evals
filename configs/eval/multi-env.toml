@@ -1,0 +1,13 @@
+endpoints_path = "../endpoints.toml"
+
+endpoint_id = "gpt-5-mini"
+save_results = true
+rollouts_per_example = 1
+
+[[eval]]
+env_id = "pipeline-debugger"
+num_examples = 15
+
+[[eval]]
+env_id = "repo-health-audit"
+num_examples = 23
